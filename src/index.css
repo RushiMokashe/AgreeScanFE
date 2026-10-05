@@ -1,0 +1,235 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+/*
+ * AgriScan design tokens, taken from the Stitch project "Smart Crop Health Advisor"
+ * (design system "AgriScan Diagnostic System"). Token names match the Stitch export, so
+ * Stitch class names such as `bg-primary`, `text-label-sm` or `px-margin` work unchanged.
+ */
+@theme {
+  /* Colors (Material 3 roles) */
+  --color-primary: #00450d;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1b5e20;
+  --color-on-primary-container: #90d689;
+  --color-primary-fixed: #acf4a4;
+  --color-primary-fixed-dim: #91d78a;
+  --color-on-primary-fixed: #002203;
+  --color-on-primary-fixed-variant: #0c5216;
+  --color-inverse-primary: #91d78a;
+
+  --color-secondary: #1b6d24;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #a0f399;
+  --color-on-secondary-container: #217128;
+  --color-secondary-fixed: #a3f69c;
+  --color-secondary-fixed-dim: #88d982;
+  --color-on-secondary-fixed: #002204;
+  --color-on-secondary-fixed-variant: #005312;
+
+  --color-tertiary: #00460e;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #006017;
+  --color-on-tertiary-container: #77db76;
+  --color-tertiary-fixed: #94f990;
+  --color-tertiary-fixed-dim: #78dc77;
+  --color-on-tertiary-fixed: #002204;
+  --color-on-tertiary-fixed-variant: #005313;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-background: #f7f9ff;
+  --color-on-background: #181c20;
+  --color-surface: #f7f9ff;
+  --color-surface-dim: #d7dadf;
+  --color-surface-bright: #f7f9ff;
+  --color-surface-tint: #2a6b2c;
+  --color-surface-variant: #e0e3e8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f1f4f9;
+  --color-surface-container: #ebeef3;
+  --color-surface-container-high: #e5e8ee;
+  --color-surface-container-highest: #e0e3e8;
+  --color-on-surface: #181c20;
+  --color-on-surface-variant: #41493e;
+  --color-inverse-surface: #2d3135;
+  --color-inverse-on-surface: #eef1f6;
+  --color-outline: #717a6d;
+  --color-outline-variant: #c0c9bb;
+
+  /*
+   * Typography: Space Grotesk for headings, Public Sans for body, data and labels. Neither has Devanagari,
+   * so Marathi and Hindi text falls through to Noto Sans Devanagari in every style.
+   */
+  --font-display-lg: "Space Grotesk", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-display-lg-mobile: "Space Grotesk", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg: "Space Grotesk", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-md: "Space Grotesk", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-headline-sm: "Space Grotesk", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-title-md: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-body-sm: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-label-lg: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-label-md: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+  --font-label-sm: "Public Sans", "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+
+  --text-display-lg: 40px;
+  --text-display-lg--line-height: 48px;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+  --text-display-lg-mobile: 32px;
+  --text-display-lg-mobile--line-height: 40px;
+  --text-display-lg-mobile--letter-spacing: -0.01em;
+  --text-display-lg-mobile--font-weight: 700;
+  --text-headline-lg: 28px;
+  --text-headline-lg--line-height: 36px;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 600;
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-md--font-weight: 600;
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+  --text-headline-sm--font-weight: 600;
+  --text-title-md: 18px;
+  --text-title-md--line-height: 26px;
+  --text-title-md--font-weight: 600;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-lg--font-weight: 400;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--font-weight: 400;
+  --text-label-lg: 15px;
+  --text-label-lg--line-height: 20px;
+  --text-label-lg--letter-spacing: 0.02em;
+  --text-label-lg--font-weight: 700;
+  --text-label-md: 13px;
+  --text-label-md--line-height: 18px;
+  --text-label-md--letter-spacing: 0.03em;
+  --text-label-md--font-weight: 600;
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--letter-spacing: 0.05em;
+  --text-label-sm--font-weight: 700;
+
+  /* Spacing (8px grid) */
+  --spacing-margin: 1rem;
+  --spacing-margin-tablet: 2rem;
+  --spacing-margin-desktop: 3rem;
+  --spacing-gutter: 1rem;
+  --spacing-gutter-tablet: 1.5rem;
+  --spacing-gutter-desktop: 2rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+
+  /* The Stitch export was rendered with Tailwind v3, whose shadow-sm is lighter than v4's. */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+  /* Scanner laser sweep on the camera viewfinder */
+  --animate-scan-laser: scan-laser 2.6s ease-in-out infinite;
+
+  @keyframes scan-laser {
+    0%,
+    100% {
+      top: 28%;
+    }
+    50% {
+      top: 68%;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-surface-container-high font-body-md text-on-surface antialiased;
+    overscroll-behavior: none;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    @apply bg-secondary-container text-on-secondary-container;
+  }
+}
+
+/*
+ * Material Symbols icons (Apache-2.0), self-hosted with only the FILL axis the design uses:
+ * 461 KB instead of Google's 4 MB all-axes file, and no third-party request.
+ * Icons are ligatures ("home" draws the house), so until the font is ready they stay hidden in a
+ * fixed 1em box: the icon name never flashes as text and nothing reflows (see src/lib/icon-font.ts).
+ */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/fonts/material-symbols-outlined.woff2") format("woff2");
+}
+
+@layer base {
+  /* In the base layer so Tailwind size and colour utilities (`text-[20px]`, `text-primary`) override it. */
+  .material-symbol {
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+    /* clip (not hidden): a scroll container would let flex/grid squeeze the icon below 1em */
+    overflow: clip;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+
+  :root:not([data-icons="ready"]) .material-symbol {
+    visibility: hidden;
+  }
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Filled variant of a Material Symbol (the design uses it for active and emphasised icons). */
+@utility icon-fill {
+  font-variation-settings: "FILL" 1;
+}
