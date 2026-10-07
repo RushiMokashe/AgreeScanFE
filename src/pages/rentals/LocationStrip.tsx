@@ -1,17 +1,17 @@
 import { Icon } from '../../components/Icon'
-import { useToast } from '../../components/toast/toast-context'
 import { useI18n } from '../../i18n/i18n-context'
 
 interface LocationStripProps {
   hubName: string
   radiusKm: number
   routes: string
+  /** Opens the hub picker. */
+  onChange: () => void
 }
 
-/** The APMC hub the rentals are listed around, with its service radius and routes. */
-export function LocationStrip({ hubName, radiusKm, routes }: LocationStripProps) {
+/** The APMC hub the rentals are listed around, with its service radius and routes, and "Change" to pick another. */
+export function LocationStrip({ hubName, radiusKm, routes, onChange }: LocationStripProps) {
   const { t } = useI18n()
-  const toast = useToast()
 
   return (
     <div className="flex items-center justify-between gap-space-xs bg-surface-container-lowest p-space-sm rounded-xl shadow-sm">
@@ -33,7 +33,8 @@ export function LocationStrip({ hubName, radiusKm, routes }: LocationStripProps)
       <button
         type="button"
         aria-label={t.rentals.location.changeLabel}
-        onClick={() => toast.show(t.rentals.location.changeComingSoon, 'info')}
+        aria-haspopup="dialog"
+        onClick={onChange}
         className="relative px-space-sm py-1.5 rounded-lg bg-surface-container text-primary font-label-sm text-label-sm flex items-center gap-1 flex-shrink-0 active:bg-surface-container-high after:absolute after:-inset-2"
       >
         <span>{t.rentals.location.change}</span>

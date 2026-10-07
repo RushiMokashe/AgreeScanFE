@@ -1,4 +1,75 @@
 import type { Translation } from '../../translation'
 import type { payments as en } from '../en/payments'
 
-export const payments: Translation<typeof en> = {}
+export const payments: Translation<typeof en> = {
+  loading: 'सुरक्षित पेमेंट उघडत आहोत…',
+  startFailed: 'पेमेंट सुरू करता आले नाही. कृपया पुन्हा प्रयत्न करा.',
+  confirmFailed: 'पेमेंटची खात्री करता आली नाही. कृपया पुन्हा प्रयत्न करा.',
+  scriptFailed: 'पेमेंट विंडो उघडता आली नाही. इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.',
+  summary: {
+    paying: 'तुम्ही भरत आहात',
+    secure: (provider) => `${provider} द्वारे सुरक्षित`,
+    testMode: 'टेस्ट मोड – खरे पैसे कापले जात नाहीत. कोणतेही योग्य दिसणारे कार्ड किंवा UPI ID चालेल.',
+  },
+  providers: {
+    STRIPE: 'Stripe',
+    RAZORPAY: 'Razorpay',
+    SIMULATED: 'AgriScan टेस्ट चेकआउट',
+  },
+  pay: (amount) => `${amount} भरा`,
+  paying: 'पेमेंट होत आहे…',
+  stripeLoading: 'कार्ड आणि UPI पर्याय येत आहेत…',
+  simulated: {
+    methodLabel: 'यातून भरा',
+    methods: {
+      CARD: 'कार्ड',
+      UPI: 'UPI',
+    },
+    cardNumber: 'कार्ड नंबर',
+    cardNumberInvalid: 'योग्य कार्ड नंबर टाका.',
+    expiry: 'मुदत (MM/YY)',
+    expiryInvalid: 'कार्डची मुदत संपली, किंवा MM/YY नाही.',
+    cvc: 'CVV',
+    cvcInvalid: '3 किंवा 4 अंकी CVV टाका.',
+    upiId: 'UPI ID',
+    upiIdHint: 'तुमच्या UPI ॲपमध्ये दिसतो तसा, उदा. name@okbank',
+    upiIdInvalid: 'name@bank सारखा UPI ID टाका.',
+    fail: 'अयशस्वी पेमेंट करून पाहा',
+  },
+  razorpay: {
+    open: (amount) => `Razorpay ने ${amount} भरा`,
+    failed: (reason) => `पेमेंट अयशस्वी: ${reason}`,
+  },
+  result: {
+    checking: 'तुमचे पेमेंट तपासत आहोत…',
+    title: {
+      REQUIRES_PAYMENT: 'पेमेंट पूर्ण झाले नाही',
+      PROCESSING: 'पेमेंट प्रक्रियेत आहे',
+      SUCCEEDED: 'पेमेंट यशस्वी',
+      FAILED: 'पेमेंट अयशस्वी',
+      CANCELLED: 'पेमेंट बंद झाले',
+    },
+    message: {
+      REQUIRES_PAYMENT: () => 'तुम्ही हे पेमेंट अजून पूर्ण केलेले नाही.',
+      PROCESSING: () => 'तुमची बँक अजून पेमेंटची खात्री करत आहे. पूर्ण होताच आम्ही तुम्हाला कळवू.',
+      SUCCEEDED: (amount) => `${amount} मिळाले. धन्यवाद!`,
+      FAILED: () => 'कोणतेही पैसे कापले गेले नाहीत. तुम्ही पुन्हा प्रयत्न करू शकता, हवे तर दुसऱ्या पद्धतीने.',
+      CANCELLED: () => 'हे पेमेंट भरण्याआधीच बंद झाले. भरण्यासाठी नवीन पेमेंट सुरू करा.',
+    },
+    reason: (reason) => `कारण: ${reason}`,
+    amount: 'रक्कम',
+    paidFor: 'कशासाठी',
+    provider: 'मार्ग',
+    reference: 'पेमेंट ID',
+    updated: 'अपडेट',
+    stillChecking: 'दर काही सेकंदांनी पुन्हा तपासत आहोत…',
+    refresh: 'पुन्हा तपासा',
+    tryAgain: 'पुन्हा प्रयत्न करा',
+    continue: 'पेमेंट सुरू ठेवा',
+    viewItem: {
+      STORE_ORDER: 'माझ्या ऑर्डर्स पाहा',
+      RENTAL_BOOKING: 'बुकिंग पाहा',
+    },
+    home: 'होमवर परत जा',
+  },
+}

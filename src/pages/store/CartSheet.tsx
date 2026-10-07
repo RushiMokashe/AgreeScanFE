@@ -3,15 +3,17 @@ import { Icon } from '../../components/Icon'
 import { useModalFocus } from '../../hooks/useModalFocus'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
-import type { Cart, CartItem } from '../../lib/types'
+import type { Cart, CartItem, PaymentMethod } from '../../lib/types'
 import { CartItemRow } from './CartItemRow'
+import { PaymentMethodPicker } from './PaymentMethodPicker'
+import { PAYMENT_METHODS } from './store-utils'
 
 interface CartSheetProps {
   cart: Cart
   /** Removes a line; resolves to the updated cart, or undefined if the removal failed. */
   onRemove: (item: CartItem) => Promise<Cart | undefined>
-  /** Places the order; resolves to whether it was placed. */
-  onCheckout: () => Promise<boolean>
+  /** Places the order, paid as chosen; resolves to whether it was placed. */
+  onCheckout: (method: PaymentMethod) => Promise<boolean>
   onClose: () => void
 }
 
@@ -25,6 +27,7 @@ export function CartSheet({ cart, onRemove, onCheckout, onClose }: CartSheetProp
   const format = useFormat()
   const sheetRef = useRef<HTMLDivElement>(null)
   const titleId = useId()
+  const [method, setMethod] = useState<PaymentMethod>(PAYMENT_METHODS[0])
   const [placing, setPlacing] = useState(false)
   useModalFocus(sheetRef, onClose)
 
@@ -35,7 +38,7 @@ export function CartSheet({ cart, onRemove, onCheckout, onClose }: CartSheetProp
 
   const placeOrder = async () => {
     setPlacing(true)
-    const placed = await onCheckout()
+    const placed = await onCheckout(method)
     setPlacing(false)
     if (placed) onClose()
   }
@@ -90,6 +93,7 @@ export function CartSheet({ cart, onRemove, onCheckout, onClose }: CartSheetProp
             </div>
             <span className="font-headline-sm text-headline-sm font-bold text-primary">{format.inr(cart.total)}</span>
           </div>
+          <PaymentMethodPicker value={method} onChange={setMethod} disabled={placing} />
           <button
             type="button"
             disabled={placing}
@@ -98,10 +102,10 @@ export function CartSheet({ cart, onRemove, onCheckout, onClose }: CartSheetProp
             className="w-full min-h-[52px] rounded-xl bg-primary text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md active:scale-[0.99] transition-transform disabled:opacity-70"
           >
             <Icon
-              name={placing ? 'progress_activity' : 'payments'}
+              name={placing ? 'progress_activity' : method === 'ONLINE' ? 'lock' : 'payments'}
               className={`text-[20px] ${placing ? 'animate-spin' : ''}`}
             />
-            <span>{t.store.cart.placeOrder}</span>
+            <span>{t.store.cart.placeOrder[method](format.inr(cart.total))}</span>
           </button>
         </div>
       </div>

@@ -5,19 +5,17 @@ import { useFormat } from '../../i18n/useFormat'
 import type { RentalSpotlight } from '../../lib/types'
 import { BookButton } from './BookButton'
 import { PerkTile } from './PerkTile'
-import type { BookingStatus } from './rentals-utils'
 
 interface SpotlightHeroProps {
   spotlight: RentalSpotlight
-  bookingStatus: BookingStatus
-  onBook: (listingId: number) => void
+  onBook: (spotlight: RentalSpotlight) => void
 }
 
 /** "Mandi Harvest Express": the featured harvest pickup, its fare and perks, and one-tap booking. */
-export function SpotlightHero({ spotlight, bookingStatus, onBook }: SpotlightHeroProps) {
+export function SpotlightHero({ spotlight, onBook }: SpotlightHeroProps) {
   const { t } = useI18n()
   const format = useFormat()
-  const { listingId, title, subtitle, label, imageUrl, baseFare, perKmRate, dispatchMinutes, perks } = spotlight
+  const { title, subtitle, label, imageUrl, baseFare, perKmRate, dispatchMinutes, perks } = spotlight
 
   return (
     <div className="px-margin my-space-sm">
@@ -63,8 +61,7 @@ export function SpotlightHero({ spotlight, bookingStatus, onBook }: SpotlightHer
               label={t.rentals.spotlight.book}
               icon="arrow_forward"
               iconAfter
-              status={bookingStatus}
-              onBook={() => onBook(listingId)}
+              onBook={() => onBook(spotlight)}
               className="px-space-md gap-1"
             />
           </div>

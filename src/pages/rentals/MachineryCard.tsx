@@ -5,15 +5,17 @@ import { FavoriteButton } from './FavoriteButton'
 import { OperatorStrip } from './OperatorStrip'
 import { RentalActions } from './RentalActions'
 import { RentalRate } from './RentalRate'
-import { badgeIconTone, distanceLabel, type BookingStatus } from './rentals-utils'
+import { badgeIconTone, distanceLabel } from './rentals-utils'
 import { SpecTile } from './SpecTile'
+
+/** Tile icon for a machine listed without a photo or an icon of its own. */
+const DEFAULT_MACHINE_ICON = 'agriculture'
 
 interface MachineryCardProps {
   listing: RentalListing
   /** Position of the card in its list; operator avatars alternate colours. */
   toneIndex: number
-  bookingStatus: BookingStatus
-  onBook: (listingId: number) => void
+  onBook: (listing: RentalListing) => void
   /** Id of the listing whose favourite toggle is in flight, if any. */
   favoritePendingId: number | null
   onToggleFavorite: (listing: RentalListing) => void
@@ -23,7 +25,6 @@ interface MachineryCardProps {
 export function MachineryCard({
   listing,
   toneIndex,
-  bookingStatus,
   onBook,
   favoritePendingId,
   onToggleFavorite,
@@ -35,7 +36,13 @@ export function MachineryCard({
   return (
     <article className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
       <div className="relative w-full h-44 bg-surface-container-high">
-        {imageUrl && <img className="w-full h-full object-cover" src={imageUrl} alt={name} loading="lazy" />}
+        {imageUrl ? (
+          <img className="w-full h-full object-cover" src={imageUrl} alt={name} loading="lazy" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-secondary-container/60 text-on-secondary-container">
+            <Icon name={listing.icon ?? DEFAULT_MACHINE_ICON} className="text-[72px]" />
+          </div>
+        )}
         {badge && (
           <div className="absolute top-3 left-3 bg-surface-container-lowest/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-primary font-label-sm text-label-sm font-bold shadow-sm flex items-center gap-1">
             {badgeIcon && <Icon name={badgeIcon} className={`text-[16px] ${badgeIconTone(badgeIcon)}`} />}
@@ -70,7 +77,7 @@ export function MachineryCard({
             ))}
           </div>
         )}
-        <RentalActions listing={listing} bookingStatus={bookingStatus} onBook={onBook} />
+        <RentalActions listing={listing} onBook={onBook} />
       </div>
     </article>
   )

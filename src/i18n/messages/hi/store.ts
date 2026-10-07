@@ -77,7 +77,16 @@ export const store: Translation<typeof en> = {
     title: 'आपका कार्ट',
     close: 'कार्ट बंद करें',
     total: 'कुल',
-    placeOrder: 'ऑर्डर करें • डिलीवरी पर नकद भुगतान',
+    paymentMethod: 'भुगतान कैसे करेंगे?',
+    methods: {
+      ONLINE: { title: 'ऑनलाइन भुगतान', subtitle: 'UPI, कार्ड या नेट बैंकिंग' },
+      CASH_ON_DELIVERY: { title: 'डिलीवरी पर नकद', subtitle: 'डिपो से सामान आने पर भुगतान करें' },
+    },
+    placeOrder: {
+      ONLINE: (total) => `${total} चुकाएँ और ऑर्डर करें`,
+      CASH_ON_DELIVERY: () => 'ऑर्डर करें • डिलीवरी पर नकद भुगतान',
+    },
+    paymentNotStarted: 'आपका ऑर्डर हो गया, पर भुगतान शुरू नहीं हो सका। "मेरे ऑर्डर" से भुगतान करें।',
     remove: (name) => `${name} हटाएँ`,
     added: (name) => `${name} कार्ट में जोड़ा गया`,
     addedToCart: 'कार्ट में जोड़ा गया',

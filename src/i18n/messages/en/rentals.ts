@@ -6,8 +6,11 @@ export const rentals = {
   location: {
     radius: (km: number) => `${km} km Radius`,
     change: 'Change',
-    changeLabel: 'Change location',
-    changeComingSoon: 'Location change coming soon',
+    changeLabel: 'Change rental hub',
+    hubsTitle: 'Choose your rental hub',
+    hubsLoading: 'Loading hubs…',
+    changed: (hub: string) => `Showing rentals near ${hub}`,
+    changeFailed: 'Could not change the hub. Please try again.',
   },
   tabs: {
     label: 'Rental type',
@@ -28,8 +31,27 @@ export const rentals = {
     dispatch: (minutes: number) => `Dispatches in **${minutes} ${minutes === 1 ? 'min' : 'mins'}** to farm gate`,
     book: 'Book Tempo',
   },
+  /** The booking sheet behind every Book button. */
   booking: {
-    booked: 'Booked',
+    title: 'Book this vehicle',
+    slot: 'When do you need it?',
+    slotHint: 'For example "Tomorrow 6:00 AM"',
+    /** The spotlight's slot: as soon as the pickup can be dispatched. */
+    asap: (minutes: number) => `As soon as possible (dispatch in ${minutes} mins)`,
+    units: {
+      HOUR: 'Estimated hours of work',
+      KM: 'Estimated distance in km',
+      DAY: 'Number of days',
+    } satisfies Record<RateUnit, string>,
+    unitsHint: (max: number) => `Between 1 and ${max}. The owner charges for the actual work done.`,
+    unitsInvalid: (max: number) => `Enter a whole number between 1 and ${max}`,
+    decrease: 'Less',
+    increase: 'More',
+    estimate: 'Estimated amount',
+    baseFare: (fare: string) => `+ ${fare} base fare`,
+    payLater: 'Pay online once the owner accepts, or pay the owner after the job.',
+    submit: 'Send booking request',
+    submitting: 'Sending request…',
     failed: 'Could not book this rental. Please try again.',
   },
   machinery: {

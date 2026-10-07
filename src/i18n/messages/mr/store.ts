@@ -77,7 +77,16 @@ export const store: Translation<typeof en> = {
     title: 'तुमचे कार्ट',
     close: 'कार्ट बंद करा',
     total: 'एकूण',
-    placeOrder: 'ऑर्डर द्या • माल मिळाल्यावर पैसे',
+    paymentMethod: 'पैसे कसे भरणार?',
+    methods: {
+      ONLINE: { title: 'ऑनलाइन पेमेंट', subtitle: 'UPI, कार्ड किंवा नेट बँकिंग' },
+      CASH_ON_DELIVERY: { title: 'डिलिव्हरीवेळी रोख', subtitle: 'डेपोतून माल आल्यावर पैसे द्या' },
+    },
+    placeOrder: {
+      ONLINE: (total) => `${total} भरा व ऑर्डर द्या`,
+      CASH_ON_DELIVERY: () => 'ऑर्डर द्या • माल मिळाल्यावर पैसे',
+    },
+    paymentNotStarted: 'तुमची ऑर्डर नोंदवली, पण पेमेंट सुरू झाले नाही. "माझ्या ऑर्डर्स" मधून पैसे भरा.',
     remove: (name) => `${name} काढा`,
     added: (name) => `${name} कार्टमध्ये जोडले`,
     addedToCart: 'कार्टमध्ये जोडले',

@@ -1,4 +1,75 @@
 import type { Translation } from '../../translation'
 import type { payments as en } from '../en/payments'
 
-export const payments: Translation<typeof en> = {}
+export const payments: Translation<typeof en> = {
+  loading: 'सुरक्षित भुगतान खोल रहे हैं…',
+  startFailed: 'भुगतान शुरू नहीं हो सका। कृपया फिर से कोशिश करें।',
+  confirmFailed: 'भुगतान की पुष्टि नहीं हो सकी। कृपया फिर से कोशिश करें।',
+  scriptFailed: 'भुगतान विंडो नहीं खुल सकी। इंटरनेट जाँचें और फिर से कोशिश करें।',
+  summary: {
+    paying: 'आप भुगतान कर रहे हैं',
+    secure: (provider) => `${provider} द्वारा सुरक्षित`,
+    testMode: 'टेस्ट मोड – असली पैसे नहीं कटते। कोई भी सही दिखने वाला कार्ड या UPI ID चलेगा।',
+  },
+  providers: {
+    STRIPE: 'Stripe',
+    RAZORPAY: 'Razorpay',
+    SIMULATED: 'AgriScan टेस्ट चेकआउट',
+  },
+  pay: (amount) => `${amount} चुकाएँ`,
+  paying: 'भुगतान हो रहा है…',
+  stripeLoading: 'कार्ड और UPI विकल्प आ रहे हैं…',
+  simulated: {
+    methodLabel: 'इससे चुकाएँ',
+    methods: {
+      CARD: 'कार्ड',
+      UPI: 'UPI',
+    },
+    cardNumber: 'कार्ड नंबर',
+    cardNumberInvalid: 'सही कार्ड नंबर डालें।',
+    expiry: 'समाप्ति (MM/YY)',
+    expiryInvalid: 'कार्ड की अवधि खत्म, या MM/YY नहीं।',
+    cvc: 'CVV',
+    cvcInvalid: '3 या 4 अंकों का CVV डालें।',
+    upiId: 'UPI ID',
+    upiIdHint: 'जैसा आपके UPI ऐप में दिखता है, जैसे name@okbank',
+    upiIdInvalid: 'name@bank जैसा UPI ID डालें।',
+    fail: 'असफल भुगतान आज़माएँ',
+  },
+  razorpay: {
+    open: (amount) => `Razorpay से ${amount} चुकाएँ`,
+    failed: (reason) => `भुगतान असफल: ${reason}`,
+  },
+  result: {
+    checking: 'आपका भुगतान जाँच रहे हैं…',
+    title: {
+      REQUIRES_PAYMENT: 'भुगतान पूरा नहीं हुआ',
+      PROCESSING: 'भुगतान प्रक्रिया में है',
+      SUCCEEDED: 'भुगतान सफल',
+      FAILED: 'भुगतान असफल',
+      CANCELLED: 'भुगतान बंद हुआ',
+    },
+    message: {
+      REQUIRES_PAYMENT: () => 'आपने यह भुगतान अभी पूरा नहीं किया है।',
+      PROCESSING: () => 'आपका बैंक अभी भुगतान की पुष्टि कर रहा है। पूरा होते ही हम आपको बताएँगे।',
+      SUCCEEDED: (amount) => `${amount} मिल गए। धन्यवाद!`,
+      FAILED: () => 'कोई पैसा नहीं कटा। आप फिर से कोशिश कर सकते हैं, चाहें तो दूसरे तरीके से।',
+      CANCELLED: () => 'यह भुगतान चुकाने से पहले ही बंद हो गया। चुकाने के लिए नया भुगतान शुरू करें।',
+    },
+    reason: (reason) => `कारण: ${reason}`,
+    amount: 'राशि',
+    paidFor: 'किसके लिए',
+    provider: 'माध्यम',
+    reference: 'भुगतान ID',
+    updated: 'अपडेट',
+    stillChecking: 'हर कुछ सेकंड में फिर से जाँच रहे हैं…',
+    refresh: 'फिर से जाँचें',
+    tryAgain: 'फिर से कोशिश करें',
+    continue: 'भुगतान जारी रखें',
+    viewItem: {
+      STORE_ORDER: 'मेरे ऑर्डर देखें',
+      RENTAL_BOOKING: 'बुकिंग देखें',
+    },
+    home: 'होम पर वापस जाएँ',
+  },
+}

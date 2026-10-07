@@ -1,5 +1,5 @@
 import type { Messages } from '../../i18n/translation'
-import type { RentalCategory, RentalListing, RentalsOverview } from '../../lib/types'
+import type { RateUnit, RentalCategory, RentalListing, RentalSpotlight, RentalsOverview } from '../../lib/types'
 
 /** The two lists behind the segment switcher. */
 export type RentalTab = 'machinery' | 'transport'
@@ -20,15 +20,57 @@ export function rentalPanelId(tab: RentalTab): string {
   return `rental-panel-${tab}`
 }
 
-/** Booking state of a listing during this visit. */
-export type BookingStatus = 'idle' | 'pending' | 'booked'
+/** What the booking sheet books: a listing card's vehicle or the spotlight's. */
+export interface BookingTarget {
+  listingId: number
+  name: string
+  rate: number
+  rateUnit: RateUnit
+  /** Charged once per trip by fare-based transport (the spotlight's pickup); 0 for everything else. */
+  baseFare: number
+  /** The slot the sheet starts with: the vehicle's next available one. */
+  slot: string
+}
 
-/** Book buttons turn pale green once the booking is confirmed. */
-export const BOOK_BUTTON_TONES = {
-  idle: 'bg-primary text-on-primary shadow-sm active:bg-primary-container',
-  pending: 'bg-primary text-on-primary shadow-sm opacity-80',
-  booked: 'bg-primary-fixed text-on-primary-fixed',
-} as const satisfies Record<BookingStatus, string>
+/** A booking's estimate when the farmer does not change it: the same defaults the server applies. */
+export const DEFAULT_UNITS = { HOUR: 2, KM: 15, DAY: 1 } as const satisfies Record<RateUnit, number>
+
+/** The largest estimate and the longest slot text a booking may have. */
+export const MAX_UNITS = 500
+export const MAX_SLOT_LENGTH = 80
+
+export function listingTarget(listing: RentalListing): BookingTarget {
+  return {
+    listingId: listing.id,
+    name: listing.name,
+    rate: listing.rate,
+    rateUnit: listing.rateUnit,
+    baseFare: 0,
+    slot: listing.availability,
+  }
+}
+
+export function spotlightTarget(spotlight: RentalSpotlight, slot: string): BookingTarget {
+  return {
+    listingId: spotlight.listingId,
+    name: spotlight.title,
+    rate: spotlight.perKmRate,
+    rateUnit: 'KM',
+    baseFare: spotlight.baseFare,
+    slot,
+  }
+}
+
+/** What a booking of `units` comes to, as the server prices it: rate × units, plus any base fare. */
+export function bookingAmount(target: BookingTarget, units: number): number {
+  return target.rate * units + target.baseFare
+}
+
+/** The typed estimate as a whole number of units, or null when it is not one the server accepts. */
+export function parseUnits(text: string): number | null {
+  const units = Number(text)
+  return Number.isInteger(units) && units >= 1 && units <= MAX_UNITS ? units : null
+}
 
 interface OperatorStripStyle {
   avatar: string

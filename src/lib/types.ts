@@ -773,12 +773,16 @@ export interface PaymentStatus {
   updatedAt: string
 }
 
+/** How a test payment with the SIMULATED provider ends, and what the tester "paid" with. */
+export type SimulatedOutcome = 'SUCCEEDED' | 'FAILED'
+export type SimulatedMethod = 'CARD' | 'UPI'
+
 export interface ConfirmPaymentRequest {
   razorpayPaymentId?: string
   razorpayOrderId?: string
   razorpaySignature?: string
-  simulatedOutcome?: 'SUCCEEDED' | 'FAILED' // SIMULATED provider only
-  simulatedMethod?: 'CARD' | 'UPI'
+  simulatedOutcome?: SimulatedOutcome // SIMULATED provider only
+  simulatedMethod?: SimulatedMethod
 }
 
 // ---------------------------------------------------------------- Voice assistant

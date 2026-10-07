@@ -1,15 +1,14 @@
 import { useI18n } from '../../i18n/i18n-context'
 import type { RentalListing } from '../../lib/types'
 import { MachineryCard } from './MachineryCard'
-import { rentalPanelId, rentalTabId, type BookingStatus } from './rentals-utils'
+import { rentalPanelId, rentalTabId } from './rentals-utils'
 
 interface MachinerySectionProps {
   listings: RentalListing[]
   onlineCount: number
   /** Another tab is selected. */
   hidden: boolean
-  bookingStatus: (listingId: number) => BookingStatus
-  onBook: (listingId: number) => void
+  onBook: (listing: RentalListing) => void
   favoritePendingId: number | null
   onToggleFavorite: (listing: RentalListing) => void
 }
@@ -19,7 +18,6 @@ export function MachinerySection({
   listings,
   onlineCount,
   hidden,
-  bookingStatus,
   onBook,
   favoritePendingId,
   onToggleFavorite,
@@ -45,7 +43,6 @@ export function MachinerySection({
           key={listing.id}
           listing={listing}
           toneIndex={index}
-          bookingStatus={bookingStatus(listing.id)}
           onBook={onBook}
           favoritePendingId={favoritePendingId}
           onToggleFavorite={onToggleFavorite}
