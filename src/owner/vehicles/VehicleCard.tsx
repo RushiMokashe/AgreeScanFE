@@ -1,10 +1,11 @@
 import { Link } from 'react-router'
 import { Icon } from '../../components/Icon'
+import { CHECKBOX_CLASSES } from '../../components/form/field-styles'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
+import { inLanguage } from '../../lib/localized-draft'
 import type { OwnerListing } from '../../lib/types'
 import { apiUrl } from '../../platform/api-base'
-import { inLanguage } from '../owner-utils'
 
 /** Tile icon of a vehicle with neither a photo nor an icon of its own, per category. */
 const CATEGORY_ICONS = { MACHINERY: 'agriculture', TRANSPORT: 'local_shipping' } as const
@@ -52,7 +53,7 @@ export function VehicleCard({ listing, switching, onToggleOnline }: VehicleCardP
             disabled={switching}
             aria-label={t.owner.vehicles.onlineLabel(name)}
             onChange={() => onToggleOnline(listing)}
-            className="h-5 w-5 accent-primary"
+            className={`h-5 w-5 ${CHECKBOX_CLASSES}`}
           />
           <span className={`font-label-md text-label-md ${listing.online ? 'text-secondary font-bold' : 'text-on-surface-variant'}`}>
             {listing.online ? t.owner.vehicles.online : t.owner.vehicles.offline}

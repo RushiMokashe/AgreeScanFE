@@ -76,12 +76,7 @@ export const owner: Translation<typeof en> = {
     availabilityHint: 'उदा. "स्लॉट: आज दुपारी 02:00" किंवा "उद्या उपलब्ध"',
     photo: {
       title: 'फोटो',
-      choose: 'फोटो निवडा',
-      change: 'फोटो बदला',
-      hint: 'JPEG, PNG किंवा WebP, 10 MB पर्यंत',
       preview: 'वाहनाचा फोटो',
-      notImage: 'फोटो निवडा (JPEG, PNG किंवा WebP)',
-      tooLarge: 'हा फोटो 10 MB पेक्षा मोठा आहे',
       failed: 'वाहन जतन झाले, पण फोटो अपलोड होऊ शकला नाही. कृपया पुन्हा प्रयत्न करा.',
     },
     icon: 'कार्डवरील चिन्ह',

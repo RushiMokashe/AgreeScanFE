@@ -1,13 +1,12 @@
 import type { Messages } from '../../i18n/translation'
 import type { Formatter } from '../../lib/format'
 import type { OwnerListing, OwnerListingInput, RateUnit, RentalCategory } from '../../lib/types'
-import { EMPTY_DRAFT, fromDraft, fromOptionalDraft, toDraft, type LocalizedDraft } from '../owner-utils'
+import { EMPTY_DRAFT, fromDraft, fromOptionalDraft, toDraft, type LocalizedDraft } from '../../lib/localized-draft'
 
 /** The server's limits on a vehicle (OwnerListingInput in lib/types.ts). */
 export const MAX_RATE = 100_000
 export const MAX_SPECS = 3
 export const MAX_FEATURES = 4
-export const MAX_PHOTO_BYTES = 10 * 1024 * 1024
 
 /** Card icons an owner can choose for a vehicle shown without a photo. */
 export const VEHICLE_ICONS = ['agriculture', 'local_shipping', 'rv_hookup', 'forklift'] as const

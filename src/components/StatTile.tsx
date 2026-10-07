@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { Icon } from '../../components/Icon'
+import { Icon } from './Icon'
 
 interface StatTileProps {
   icon: string
@@ -11,7 +11,7 @@ interface StatTileProps {
   highlighted?: boolean
 }
 
-/** One number of the owner's dashboard. */
+/** One number of a portal dashboard. */
 export function StatTile({ icon, label, value, to, highlighted = false }: StatTileProps) {
   const className = `flex flex-col gap-1 rounded-xl p-space-sm shadow-sm ${
     highlighted ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-surface-container-lowest text-on-surface'

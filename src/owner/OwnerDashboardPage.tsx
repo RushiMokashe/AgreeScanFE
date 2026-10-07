@@ -1,6 +1,9 @@
 import { Link } from 'react-router'
 import { Icon } from '../components/Icon'
 import { ErrorState, LoadingState } from '../components/PageState'
+import { StatTile } from '../components/StatTile'
+import { PaymentsToConfirm } from '../components/payments/PaymentsToConfirm'
+import { ScanAndPayCard } from '../components/payments/ScanAndPayCard'
 import { useApi } from '../hooks/useApi'
 import { useI18n } from '../i18n/i18n-context'
 import { useFormat } from '../i18n/useFormat'
@@ -8,7 +11,6 @@ import { api } from '../lib/api'
 import { isOwnerBookingRoute, useNotificationRefresh } from '../notifications/useNotificationRefresh'
 import { OwnerBookingCard } from './bookings/OwnerBookingCard'
 import { BusinessCard } from './dashboard/BusinessCard'
-import { StatTile } from './dashboard/StatTile'
 import { STATUS_PARAM } from './owner-utils'
 
 const SHORTCUT =
@@ -37,10 +39,24 @@ export default function OwnerDashboardPage() {
   if (!profile.data || !dashboard.data) return <LoadingState label={t.owner.dashboard.loading} />
 
   const { listingsOnline, listingsTotal, pendingRequests, earningsThisMonth, upcoming } = dashboard.data
+  const owner = profile.data
 
   return (
     <div className="flex flex-col gap-space-md px-margin py-space-sm">
-      <BusinessCard profile={profile.data} onChange={profile.setData} />
+      <BusinessCard profile={owner} onChange={profile.setData} />
+      <ScanAndPayCard
+        acceptsScanAndPay={owner.acceptsScanAndPay}
+        upiId={owner.upiId}
+        upiQrUrl={owner.upiQrUrl}
+        onSaveUpiId={async (upiId) =>
+          profile.setData(
+            await api.owner.updateMe({ name: owner.name, businessName: owner.businessName, hubId: owner.hubId, upiId }),
+          )
+        }
+        onUploadQr={async (image) => profile.setData(await api.owner.uploadUpiQr(image))}
+        onRemoveQr={async () => profile.setData(await api.owner.removeUpiQr())}
+      />
+      <PaymentsToConfirm purpose="RENTAL_BOOKING" onDecided={dashboard.reload} />
 
       <div className="grid grid-cols-3 gap-space-sm">
         <StatTile

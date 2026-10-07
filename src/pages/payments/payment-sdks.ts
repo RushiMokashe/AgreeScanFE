@@ -43,7 +43,8 @@ export interface RazorpayOptions {
   order_id: string
   name: string
   description: string
-  prefill: { name: string; contact: string }
+  /** The farmer's details, and the method Razorpay opens on. */
+  prefill: { name: string; contact: string; method: 'card' | 'upi' }
   theme: { color: string }
   handler: (response: RazorpaySuccess) => void
   modal: { ondismiss: () => void }

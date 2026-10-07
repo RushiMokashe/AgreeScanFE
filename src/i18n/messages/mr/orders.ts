@@ -13,6 +13,7 @@ export const orders: Translation<typeof en> = {
   items: (count) => `${count} वस्तू`,
   status: {
     AWAITING_PAYMENT: 'पेमेंट बाकी',
+    VERIFYING_PAYMENT: 'पेमेंटची खात्री बाकी',
     PLACED: 'ऑर्डर नोंदवली',
     PAID: 'पैसे भरले',
     CANCELLED: 'रद्द',
@@ -24,6 +25,8 @@ export const orders: Translation<typeof en> = {
   lineQuantity: (quantity, price) => `${quantity} × ${price}`,
   total: 'एकूण',
   payHint: 'ही ऑर्डर पूर्ण करण्यासाठी ऑनलाइन पैसे भरा.',
+  from: (shop) => `${shop} कडून`,
+  verifyingHint: (shop) => `${shop} तुमच्या स्कॅन करून केलेल्या पेमेंटची खात्री करतील, त्याची वाट पाहत आहोत.`,
   payNow: (amount) => `आता ${amount} भरा`,
   paying: 'पेमेंट उघडत आहोत…',
 }

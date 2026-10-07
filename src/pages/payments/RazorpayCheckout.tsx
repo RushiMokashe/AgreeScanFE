@@ -14,14 +14,16 @@ const THEME_COLOR = '#00450d'
 interface RazorpayCheckoutProps {
   checkout: PaymentCheckout
   razorpay: RazorpaySession
-  onDone: () => void
+  /** Opens Razorpay on the method the farmer picked; Razorpay still offers the others. */
+  method: 'CARD' | 'UPI'
+  onDone: (paymentId: number) => void
 }
 
 /**
  * Razorpay Checkout (UPI, cards, net banking, wallets), opened over the page. Razorpay signs a successful payment; the
  * server verifies that signature before the payment counts. A failed attempt can be retried in the same window.
  */
-export function RazorpayCheckout({ checkout, razorpay, onDone }: RazorpayCheckoutProps) {
+export function RazorpayCheckout({ checkout, razorpay, method, onDone }: RazorpayCheckoutProps) {
   const { t } = useI18n()
   const format = useFormat()
   const [busy, setBusy] = useState(false)
@@ -50,7 +52,11 @@ export function RazorpayCheckout({ checkout, razorpay, onDone }: RazorpayCheckou
       order_id: razorpay.orderId,
       name: razorpay.merchantName,
       description: razorpay.description,
-      prefill: { name: razorpay.prefillName, contact: razorpay.prefillContact },
+      prefill: {
+        name: razorpay.prefillName,
+        contact: razorpay.prefillContact,
+        method: method === 'CARD' ? 'card' : 'upi',
+      },
       theme: { color: THEME_COLOR },
       handler: (response) => {
         api.payments
@@ -59,7 +65,7 @@ export function RazorpayCheckout({ checkout, razorpay, onDone }: RazorpayCheckou
             razorpayOrderId: response.razorpay_order_id,
             razorpaySignature: response.razorpay_signature,
           })
-          .then(onDone, (failure: unknown) => {
+          .then(() => onDone(checkout.paymentId), (failure: unknown) => {
             setError(describeError(failure, t.payments.confirmFailed))
             setBusy(false)
           })

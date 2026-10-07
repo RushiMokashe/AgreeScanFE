@@ -28,7 +28,7 @@ const STRIPE_LOCALE = 'auto'
 interface StripeCheckoutProps {
   checkout: PaymentCheckout
   stripe: StripeSession
-  onDone: () => void
+  onDone: (paymentId: number) => void
 }
 
 /**
@@ -85,7 +85,7 @@ export function StripeCheckout({ checkout, stripe: session, onDone }: StripeChec
     }
     try {
       await api.payments.confirm(checkout.paymentId)
-      onDone()
+      onDone(checkout.paymentId)
     } catch (failure) {
       setError(describeError(failure, t.payments.confirmFailed))
       setBusy(false)

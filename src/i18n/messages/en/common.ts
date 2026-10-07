@@ -24,8 +24,16 @@ export const common = {
   roles: {
     FARMER: 'Farmer',
     VEHICLE_OWNER: 'Vehicle owner',
+    SHOPKEEPER: 'Shopkeeper',
     ADMIN: 'Admin',
   } satisfies Record<Role, string>,
+  photo: {
+    choose: 'Choose photo',
+    change: 'Change photo',
+    hint: 'JPEG, PNG or WebP, up to 10 MB',
+    notImage: 'Choose a photo (JPEG, PNG or WebP)',
+    tooLarge: 'This photo is larger than 10 MB',
+  },
   notFound: {
     title: 'This field is empty',
     message: 'The page you opened does not exist.',

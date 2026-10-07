@@ -78,12 +78,7 @@ export const owner = {
     availabilityHint: 'For example "Slot: 02:00 PM Today" or "Available Tomorrow"',
     photo: {
       title: 'Photo',
-      choose: 'Choose photo',
-      change: 'Change photo',
-      hint: 'JPEG, PNG or WebP, up to 10 MB',
       preview: 'Vehicle photo',
-      notImage: 'Choose a photo (JPEG, PNG or WebP)',
-      tooLarge: 'This photo is larger than 10 MB',
       failed: 'The vehicle is saved, but its photo could not be uploaded. Please try again.',
     },
     icon: 'Card icon',

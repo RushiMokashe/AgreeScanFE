@@ -1,8 +1,8 @@
 import { Icon } from '../../components/Icon'
+import { OrderStatusChip } from '../../components/orders/OrderStatusChip'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { OrderSummary } from '../../lib/types'
-import { OrderStatusChip } from './OrderStatusChip'
 
 interface OrderCardProps {
   order: OrderSummary
@@ -28,6 +28,10 @@ export function OrderCard({ order, paying, payDisabled, onPay }: OrderCardProps)
         <span className="font-body-sm text-body-sm text-on-surface-variant">
           {t.orders.placed(format.timeAgo(order.placedAt))} • {t.orders.method[order.paymentMethod]}
         </span>
+        <span className="flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant">
+          <Icon name="storefront" className="text-[16px]" />
+          {t.orders.from(order.shopName)}
+        </span>
       </div>
       <ul className="flex flex-col divide-y divide-surface-container-high">
         {order.lines.map((line) => (
@@ -50,6 +54,12 @@ export function OrderCard({ order, paying, payDisabled, onPay }: OrderCardProps)
         </span>
         <span className="font-headline-sm text-headline-sm font-bold text-primary">{format.inr(order.total)}</span>
       </div>
+      {order.status === 'VERIFYING_PAYMENT' && (
+        <p className="flex items-start gap-space-xs rounded-xl bg-secondary-container/50 px-space-sm py-space-xs font-body-sm text-body-sm text-on-surface">
+          <Icon name="hourglass_top" className="mt-0.5 text-[18px] text-secondary" />
+          {t.orders.verifyingHint(order.shopName)}
+        </p>
+      )}
       {order.status === 'AWAITING_PAYMENT' && (
         <div className="flex flex-col gap-space-xs">
           <p className="font-body-sm text-body-sm text-on-surface-variant">{t.orders.payHint}</p>

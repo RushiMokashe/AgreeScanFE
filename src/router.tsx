@@ -6,6 +6,7 @@ import { AdminLayout } from './components/layout/AdminLayout'
 import { AppShell } from './components/layout/AppShell'
 import { FarmerLayout } from './components/layout/FarmerLayout'
 import { OwnerLayout } from './components/layout/OwnerLayout'
+import { ShopLayout } from './components/layout/ShopLayout'
 import type { RouteHandle } from './components/layout/route-handle'
 import { RouteError } from './components/layout/RouteError'
 import { TabLayout } from './components/layout/TabLayout'
@@ -134,7 +135,54 @@ export const router = createBrowserRouter([
           },
           {
             path: 'notifications',
-            lazy: page(() => import('./notifications/NotificationsPage')),
+            element: <NotificationsPage />,
+            handle: screen((t) => t.nav.screens.notifications),
+          },
+          profile,
+          notFound,
+        ],
+      },
+      {
+        path: 'shop',
+        element: (
+          <RequireRole roles={['SHOPKEEPER']}>
+            <ShopLayout />
+          </RequireRole>
+        ),
+        children: [
+          {
+            index: true,
+            lazy: page(() => import('./shop/ShopDashboardPage')),
+            handle: screen((t) => t.nav.screens.shopDashboard),
+          },
+          {
+            path: 'products',
+            lazy: page(() => import('./shop/products/ShopProductsPage')),
+            handle: screen((t) => t.nav.screens.shopProducts),
+          },
+          {
+            path: 'products/new',
+            lazy: page(() => import('./shop/products/ShopProductFormPage')),
+            handle: screen((t) => t.nav.screens.newProduct),
+          },
+          {
+            path: 'products/:id',
+            lazy: page(() => import('./shop/products/ShopProductFormPage')),
+            handle: screen((t) => t.nav.screens.editProduct),
+          },
+          {
+            path: 'orders',
+            lazy: page(() => import('./shop/orders/ShopOrdersPage')),
+            handle: screen((t) => t.nav.screens.shopOrders),
+          },
+          {
+            path: 'settings',
+            lazy: page(() => import('./shop/settings/ShopSettingsPage')),
+            handle: screen((t) => t.nav.screens.shopSettings),
+          },
+          {
+            path: 'notifications',
+            element: <NotificationsPage />,
             handle: screen((t) => t.nav.screens.notifications),
           },
           profile,

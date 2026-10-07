@@ -21,7 +21,8 @@ export function BookingActions({ booking, onChange }: BookingActionsProps) {
   const { paying, payNow } = usePayNow()
   const [cancelling, setCancelling] = useState(false)
 
-  if (!booking.canPay && !booking.canCancel) return null
+  const verifying = booking.paymentStatus === 'VERIFYING'
+  if (!booking.canPay && !booking.canCancel && !verifying) return null
 
   const cancel = async (reason: string | null) => {
     onChange(await api.cancelBooking(booking.id, reason))
@@ -33,6 +34,12 @@ export function BookingActions({ booking, onChange }: BookingActionsProps) {
 
   return (
     <section className="flex flex-col gap-space-sm">
+      {verifying && (
+        <p className="flex items-start gap-space-xs rounded-xl bg-secondary-container/50 px-space-sm py-space-sm font-body-sm text-body-sm text-on-surface">
+          <Icon name="hourglass_top" className="mt-0.5 text-[18px] text-secondary" />
+          {t.bookings.detail.verifyingHint(booking.operatorName)}
+        </p>
+      )}
       {booking.canPay && (
         <>
           <button

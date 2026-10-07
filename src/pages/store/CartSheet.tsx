@@ -65,6 +65,7 @@ export function CartSheet({ cart, onRemove, onCheckout, onClose }: CartSheetProp
             </h2>
             <p className="font-label-sm text-label-sm text-on-surface-variant">
               {t.store.cart.itemCount(cart.itemCount)}
+              {cart.shopName && ` • ${t.store.cart.from(cart.shopName)}`}
             </p>
           </div>
           <button

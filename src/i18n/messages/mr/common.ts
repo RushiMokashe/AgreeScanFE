@@ -24,7 +24,15 @@ export const common: Translation<typeof en> = {
   roles: {
     FARMER: 'शेतकरी',
     VEHICLE_OWNER: 'वाहन मालक',
+    SHOPKEEPER: 'दुकानदार',
     ADMIN: 'प्रशासक',
+  },
+  photo: {
+    choose: 'फोटो निवडा',
+    change: 'फोटो बदला',
+    hint: 'JPEG, PNG किंवा WebP, 10 MB पर्यंत',
+    notImage: 'फोटो निवडा (JPEG, PNG किंवा WebP)',
+    tooLarge: 'हा फोटो 10 MB पेक्षा मोठा आहे',
   },
   notFound: {
     title: 'हे शेत रिकामे आहे',

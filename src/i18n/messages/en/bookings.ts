@@ -21,6 +21,7 @@ export const bookings = {
   } satisfies Record<BookingStatus, string>,
   payment: {
     UNPAID: 'Not paid yet',
+    VERIFYING: 'Payment to verify',
     PAID: 'Paid online',
   } satisfies Record<BookingPaymentStatus, string>,
   /** An estimate: "3 hours", "15 km", "1 day". */
@@ -73,6 +74,7 @@ export const bookings = {
     pay: (amount: string) => `Pay ${amount} online`,
     paying: 'Opening payment…',
     payLater: 'Prefer cash? You can also pay the owner directly after the job.',
+    verifyingHint: (owner: string) => `Waiting for ${owner} to confirm your Scan & Pay payment.`,
     cancel: 'Cancel booking',
     cancelTitle: 'Cancel this booking?',
     cancelMessage: 'We will tell the owner. A short reason helps them plan.',

@@ -2,7 +2,7 @@ import { Field } from '../../components/form/Field'
 import { INPUT_CLASSES } from '../../components/form/field-styles'
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
-import { LocalizedTextInput } from './LocalizedTextInput'
+import { LocalizedTextInput } from '../../components/form/LocalizedTextInput'
 import { FEATURE_ICONS, MAX_FEATURES, emptyFeature, type FeatureDraft, type FeatureIcon } from './vehicle-form'
 
 interface FeaturesEditorProps {

@@ -14,6 +14,7 @@ export const orders = {
   items: (count: number) => `${count} ${count === 1 ? 'item' : 'items'}`,
   status: {
     AWAITING_PAYMENT: 'Awaiting payment',
+    VERIFYING_PAYMENT: 'Payment to verify',
     PLACED: 'Placed',
     PAID: 'Paid',
     CANCELLED: 'Cancelled',
@@ -26,6 +27,8 @@ export const orders = {
   lineQuantity: (quantity: number, price: string) => `${quantity} × ${price}`,
   total: 'Total',
   payHint: 'Pay online to complete this order.',
+  from: (shop: string) => `From ${shop}`,
+  verifyingHint: (shop: string) => `Waiting for ${shop} to confirm your Scan & Pay payment.`,
   payNow: (amount: string) => `Pay ${amount} now`,
   paying: 'Opening payment…',
 }

@@ -4,6 +4,7 @@ import { BookingTimeline } from '../../components/booking/BookingTimeline'
 import { PaymentStatusChip } from '../../components/booking/PaymentStatusChip'
 import { Icon } from '../../components/Icon'
 import { ErrorState, LoadingState } from '../../components/PageState'
+import { PaymentsToConfirm } from '../../components/payments/PaymentsToConfirm'
 import { useApi } from '../../hooks/useApi'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
@@ -86,6 +87,9 @@ export default function OwnerBookingDetailPage() {
         </div>
       </dl>
 
+      {booking.paymentStatus === 'VERIFYING' && (
+        <PaymentsToConfirm purpose="RENTAL_BOOKING" referenceId={booking.id} onDecided={reload} />
+      )}
       <OwnerBookingActions booking={booking} onChange={setData} />
       <BookingTimeline timeline={booking.timeline} viewer="OWNER" />
       <Link

@@ -1,9 +1,10 @@
-import { Icon } from '../../components/Icon'
+import { Icon } from '../Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import type { OrderStatus } from '../../lib/types'
 
 const ORDER_STATUS_STYLES: Record<OrderStatus, { icon: string; tone: string }> = {
   AWAITING_PAYMENT: { icon: 'schedule', tone: 'bg-tertiary-fixed text-on-tertiary-fixed' },
+  VERIFYING_PAYMENT: { icon: 'hourglass_top', tone: 'bg-secondary-container text-on-secondary-container' },
   PLACED: { icon: 'inventory_2', tone: 'bg-secondary-container text-on-secondary-container' },
   PAID: { icon: 'verified', tone: 'bg-primary text-on-primary' },
   CANCELLED: { icon: 'cancel', tone: 'bg-surface-container-highest text-on-surface-variant' },

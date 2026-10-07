@@ -13,6 +13,7 @@ export const orders: Translation<typeof en> = {
   items: (count) => `${count} आइटम`,
   status: {
     AWAITING_PAYMENT: 'भुगतान बाकी',
+    VERIFYING_PAYMENT: 'भुगतान की पुष्टि बाकी',
     PLACED: 'ऑर्डर हो गया',
     PAID: 'भुगतान हुआ',
     CANCELLED: 'रद्द',
@@ -24,6 +25,8 @@ export const orders: Translation<typeof en> = {
   lineQuantity: (quantity, price) => `${quantity} × ${price}`,
   total: 'कुल',
   payHint: 'यह ऑर्डर पूरा करने के लिए ऑनलाइन भुगतान करें।',
+  from: (shop) => `${shop} से`,
+  verifyingHint: (shop) => `${shop} आपके स्कैन करके किए गए भुगतान की पुष्टि करेंगे, उसका इंतज़ार है।`,
   payNow: (amount) => `अभी ${amount} चुकाएँ`,
   paying: 'भुगतान खोल रहे हैं…',
 }

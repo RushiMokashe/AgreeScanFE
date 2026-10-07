@@ -38,7 +38,14 @@ export function BusinessSheet({ profile, onSaved, onClose }: BusinessSheetProps)
     setNameError(undefined)
     setSaving(true)
     try {
-      onSaved(await api.owner.updateMe({ name: name.trim(), businessName: businessName.trim() || null, hubId }))
+      onSaved(
+        await api.owner.updateMe({
+          name: name.trim(),
+          businessName: businessName.trim() || null,
+          hubId,
+          upiId: profile.upiId, // set apart, in the Scan & Pay card
+        }),
+      )
     } catch (error) {
       setFormError(describeError(error, t.common.errors.unexpected))
       setSaving(false)

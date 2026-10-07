@@ -15,6 +15,7 @@ import { plots } from './plots'
 import { profile } from './profile'
 import { rentals } from './rentals'
 import { scan } from './scan'
+import { shop } from './shop'
 import { store } from './store'
 import { treatment } from './treatment'
 
@@ -41,5 +42,6 @@ export const en = {
   orders,
   payments,
   owner,
+  shop,
   admin,
 }

@@ -45,6 +45,10 @@ export function ProductCard({ product, onAdd }: ProductCardProps) {
             )}
             <h3 className="font-title-md text-title-md font-bold text-on-surface mt-1 truncate">{name}</h3>
             <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">{description}</p>
+            <p className="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant truncate">
+              <Icon name="storefront" className="text-[14px]" />
+              {t.store.product.soldBy(product.shopName)}
+            </p>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="font-headline-sm text-headline-sm font-bold text-primary">{priceLabel}</span>

@@ -6,8 +6,8 @@ import { useToast } from '../../components/toast/toast-context'
 import { useApi } from '../../hooks/useApi'
 import { useI18n } from '../../i18n/i18n-context'
 import { api, describeError } from '../../lib/api'
+import { inLanguage } from '../../lib/localized-draft'
 import type { OwnerListing } from '../../lib/types'
-import { inLanguage } from '../owner-utils'
 import { VehicleCard } from './VehicleCard'
 
 /** The owner's vehicles (/owner/vehicles): switch each on or off for bookings, edit it, or add another. */

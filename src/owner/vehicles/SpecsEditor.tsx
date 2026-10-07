@@ -1,6 +1,6 @@
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
-import { LocalizedTextInput } from './LocalizedTextInput'
+import { LocalizedTextInput } from '../../components/form/LocalizedTextInput'
 import { MAX_SPECS, emptySpec, type SpecDraft } from './vehicle-form'
 
 interface SpecsEditorProps {

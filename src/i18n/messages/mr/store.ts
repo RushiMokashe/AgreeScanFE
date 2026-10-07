@@ -66,6 +66,7 @@ export const store: Translation<typeof en> = {
   product: {
     add: (price) => `जोडा ${price}`,
     addLabel: (price, name) => `${name} कार्टमध्ये जोडा, ${price}`,
+    soldBy: (shop) => `विक्रेता: ${shop}`,
     rating: (rating) => `5 पैकी ${rating} स्टार`,
   },
   cart: {
@@ -87,6 +88,12 @@ export const store: Translation<typeof en> = {
       CASH_ON_DELIVERY: () => 'ऑर्डर द्या • माल मिळाल्यावर पैसे',
     },
     paymentNotStarted: 'तुमची ऑर्डर नोंदवली, पण पेमेंट सुरू झाले नाही. "माझ्या ऑर्डर्स" मधून पैसे भरा.',
+    from: (shop) => `${shop} कडून`,
+    otherShop: {
+      title: 'नवीन कार्ट सुरू करायची?',
+      confirm: 'कार्ट रिकामी करून जोडा',
+      cancel: 'माझी कार्ट ठेवा',
+    },
     remove: (name) => `${name} काढा`,
     added: (name) => `${name} कार्टमध्ये जोडले`,
     addedToCart: 'कार्टमध्ये जोडले',

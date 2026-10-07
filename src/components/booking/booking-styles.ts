@@ -15,5 +15,6 @@ export const BOOKING_STATUS_STYLES: Record<BookingStatus, { icon: string; tone: 
 
 export const PAYMENT_STATUS_STYLES: Record<BookingPaymentStatus, { icon: string; tone: string }> = {
   UNPAID: { icon: 'schedule', tone: 'bg-surface-container-high text-on-surface-variant' },
+  VERIFYING: { icon: 'hourglass_top', tone: 'bg-tertiary-fixed text-on-tertiary-fixed' },
   PAID: { icon: 'verified', tone: 'bg-secondary-container text-on-secondary-container' },
 }

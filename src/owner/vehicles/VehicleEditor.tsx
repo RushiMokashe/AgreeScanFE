@@ -2,9 +2,11 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 import { Field } from '../../components/form/Field'
 import { FormError } from '../../components/form/FormError'
+import { LocalizedTextInput } from '../../components/form/LocalizedTextInput'
+import { PhotoPicker } from '../../components/form/PhotoPicker'
 import { SubmitButton } from '../../components/form/SubmitButton'
 import { TextField } from '../../components/form/TextField'
-import { INPUT_CLASSES } from '../../components/form/field-styles'
+import { CHECKBOX_CLASSES, INPUT_CLASSES } from '../../components/form/field-styles'
 import { Icon } from '../../components/Icon'
 import { useToast } from '../../components/toast/toast-context'
 import { useI18n } from '../../i18n/i18n-context'
@@ -12,8 +14,6 @@ import { useFormat } from '../../i18n/useFormat'
 import { api, describeError } from '../../lib/api'
 import type { OwnerListing, RateUnit, RentalCategory, RentalHubOption } from '../../lib/types'
 import { FeaturesEditor } from './FeaturesEditor'
-import { LocalizedTextInput } from './LocalizedTextInput'
-import { PhotoPicker } from './PhotoPicker'
 import { SpecsEditor } from './SpecsEditor'
 import {
   MAX_RATE,
@@ -202,7 +202,12 @@ export function VehicleEditor({ initial, hubs, imageUrl, listingId }: VehicleEdi
         translations={translations}
       />
 
-      <PhotoPicker currentUrl={imageUrl} onChange={setPhoto} />
+      <PhotoPicker
+        label={t.owner.form.photo.title}
+        previewAlt={t.owner.form.photo.preview}
+        currentUrl={imageUrl}
+        onChange={setPhoto}
+      />
       <Field label={t.owner.form.icon} hint={t.owner.form.iconHint}>
         {(control) => (
           <select
@@ -244,7 +249,7 @@ export function VehicleEditor({ initial, hubs, imageUrl, listingId }: VehicleEdi
           role="switch"
           checked={form.online}
           onChange={(event) => set('online', event.target.checked)}
-          className="h-6 w-6 accent-primary"
+          className={`h-6 w-6 ${CHECKBOX_CLASSES}`}
         />
       </label>
 

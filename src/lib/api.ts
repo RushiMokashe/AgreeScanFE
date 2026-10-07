@@ -3,6 +3,7 @@ import { common as englishCommon } from '../i18n/messages/en/common'
 import { apiUrl } from '../platform/api-base'
 import { sessionTransport } from '../platform/session-transport'
 import type {
+  AddToCartRequest,
   AdminCommodityPrice,
   AdminMarket,
   AdminOverview,
@@ -40,6 +41,7 @@ import type {
   MandiOverview,
   NearbyStock,
   OrderConfirmation,
+  OrderStatus,
   OrderSummary,
   OwnerBooking,
   OwnerBookingDetail,
@@ -62,9 +64,17 @@ import type {
   RentalsOverview,
   ResetPasswordRequest,
   Role,
+  ScanAndPayRequest,
   ScanContext,
   ScanDetail,
   ScanSummary,
+  SellerPayment,
+  ShopDashboard,
+  ShopOrder,
+  ShopProduct,
+  ShopProductInput,
+  ShopProfile,
+  ShopProfileInput,
   StoreHome,
   TreatmentPlan,
   UnreadCount,
@@ -76,11 +86,14 @@ import type {
 export class ApiError extends Error {
   /** HTTP status, or 0 when no response arrived (offline, connection refused). */
   readonly status: number
+  /** The server's key for this error, for the few a screen reacts to, e.g. "store.cart.other-shop". */
+  readonly code: string | null
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, code: string | null = null) {
     super(message)
     this.name = 'ApiError'
     this.status = status
+    this.code = code
   }
 }
 
@@ -202,15 +215,16 @@ const GATEWAY_STATUSES: ReadonlySet<number> = new Set([502, 503, 504])
 /** Developers learn why the server is unreachable: the Vite proxy expects the backend on :8080. */
 const DEV_SERVER_HINT = import.meta.env.DEV ? ' (Development: start the backend on port 8080.)' : ''
 
-async function errorMessage(res: Response): Promise<string> {
-  if (GATEWAY_STATUSES.has(res.status)) return messages.serverUnreachable + DEV_SERVER_HINT
+/** The server's explanation of a failed call (and its key, if any), else a generic one in the app language. */
+async function errorOf(res: Response): Promise<ApiError> {
+  if (GATEWAY_STATUSES.has(res.status)) return new ApiError(res.status, messages.serverUnreachable + DEV_SERVER_HINT)
   try {
     const body = (await res.json()) as Partial<ApiErrorBody>
-    if (body.message) return body.message
+    if (body.message) return new ApiError(res.status, body.message, body.code ?? null)
   } catch {
     // the error body was not JSON; fall back to the generic message
   }
-  return messages.requestFailed(res.status)
+  return new ApiError(res.status, messages.requestFailed(res.status))
 }
 
 async function send(path: string, init: RequestInit, accessToken: string | undefined): Promise<Response> {
@@ -250,7 +264,7 @@ async function request<T>(
       throw new ApiError(401, messages.sessionExpired)
     }
   }
-  if (!res.ok) throw new ApiError(res.status, await errorMessage(res))
+  if (!res.ok) throw await errorOf(res)
   if (res.status === 204) return undefined as T
   return (await res.json()) as T
 }
@@ -328,7 +342,9 @@ export const api = {
     get<Product[]>(`/store/products${query(filter)}`),
   productByBarcode: (code: string) => get<Product>(`/store/products/barcode/${encodeURIComponent(code)}`),
   cart: () => get<Cart>('/cart'),
-  addToCart: (productId: number, quantity = 1) => post<Cart>('/cart/items', { productId, quantity }),
+  /** Another shop's product is refused (409) unless replaceCart, which empties the cart first: ask the farmer. */
+  addToCart: (productId: number, replaceCart = false, quantity = 1) =>
+    post<Cart>('/cart/items', { productId, quantity, replaceCart } satisfies AddToCartRequest),
   removeFromCart: (itemId: number) => del<Cart>(`/cart/items/${itemId}`),
   checkout: (request: CheckoutRequest) => post<OrderConfirmation>('/cart/checkout', request),
   orders: () => get<OrderSummary[]>('/orders'),
@@ -340,6 +356,40 @@ export const api = {
     create: (request: CreatePaymentRequest) => post<PaymentCheckout>('/payments', request),
     get: (id: number) => get<PaymentStatus>(`/payments/${id}`),
     confirm: (id: number, request: ConfirmPaymentRequest = {}) => post<PaymentStatus>(`/payments/${id}/confirm`, request),
+    /** The farmer paid the seller directly by Scan & Pay; the seller confirms it later. */
+    scanAndPay: (request: ScanAndPayRequest) => post<PaymentStatus>('/payments/scan-and-pay', request),
+  },
+
+  /** Shopkeepers and vehicle owners: the Scan & Pay payments farmers sent them, and their word on each. */
+  seller: {
+    payments: (status?: PaymentStatusCode) => get<SellerPayment[]>(`/seller/payments${query({ status })}`),
+    received: (paymentId: number) => post<SellerPayment>(`/seller/payments/${paymentId}/received`),
+    notReceived: (paymentId: number, reason: string | null) =>
+      post<SellerPayment>(`/seller/payments/${paymentId}/not-received`, { reason }),
+  },
+
+  /** The shopkeeper portal. */
+  shop: {
+    me: () => get<ShopProfile>('/shop/me'),
+    updateMe: (input: ShopProfileInput) => put<ShopProfile>('/shop/me', input),
+    uploadUpiQr: (image: File) => {
+      const form = new FormData()
+      form.append('image', image)
+      return request<ShopProfile>('/shop/me/upi-qr', { method: 'POST', body: form })
+    },
+    removeUpiQr: () => del<ShopProfile>('/shop/me/upi-qr'),
+    dashboard: () => get<ShopDashboard>('/shop/dashboard'),
+    orders: (status?: OrderStatus) => get<ShopOrder[]>(`/shop/orders${query({ status })}`),
+    products: () => get<ShopProduct[]>('/shop/products'),
+    product: (id: number) => get<ShopProduct>(`/shop/products/${id}`),
+    createProduct: (input: ShopProductInput) => post<ShopProduct>('/shop/products', input),
+    updateProduct: (id: number, input: ShopProductInput) => put<ShopProduct>(`/shop/products/${id}`, input),
+    setProductStock: (id: number, inStock: boolean) => patch<ShopProduct>(`/shop/products/${id}/stock`, { inStock }),
+    uploadProductPhoto: (id: number, image: File) => {
+      const form = new FormData()
+      form.append('image', image)
+      return request<ShopProduct>(`/shop/products/${id}/photo`, { method: 'POST', body: form })
+    },
   },
 
   /** Every call here keeps the session (getSession / subscribeSession) up to date. */
@@ -367,6 +417,12 @@ export const api = {
   owner: {
     me: () => get<VehicleOwnerProfile>('/owner/me'),
     updateMe: (input: OwnerProfileInput) => put<VehicleOwnerProfile>('/owner/me', input),
+    uploadUpiQr: (image: File) => {
+      const form = new FormData()
+      form.append('image', image)
+      return request<VehicleOwnerProfile>('/owner/me/upi-qr', { method: 'POST', body: form })
+    },
+    removeUpiQr: () => del<VehicleOwnerProfile>('/owner/me/upi-qr'),
     dashboard: () => get<OwnerDashboard>('/owner/dashboard'),
     listings: () => get<OwnerListing[]>('/owner/listings'),
     listing: (id: number) => get<OwnerListing>(`/owner/listings/${id}`),

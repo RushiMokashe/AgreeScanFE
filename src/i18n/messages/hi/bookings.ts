@@ -18,6 +18,7 @@ export const bookings: Translation<typeof en> = {
   },
   payment: {
     UNPAID: 'भुगतान बाकी',
+    VERIFYING: 'भुगतान की पुष्टि बाकी',
     PAID: 'ऑनलाइन भुगतान हुआ',
   },
   units: {
@@ -66,6 +67,7 @@ export const bookings: Translation<typeof en> = {
     pay: (amount) => `${amount} ऑनलाइन चुकाएँ`,
     paying: 'भुगतान खोल रहे हैं…',
     payLater: 'नकद देना है? काम के बाद सीधे मालिक को भी भुगतान कर सकते हैं।',
+    verifyingHint: (owner) => `${owner} आपके स्कैन करके किए गए भुगतान की पुष्टि करेंगे, उसका इंतज़ार है।`,
     cancel: 'बुकिंग रद्द करें',
     cancelTitle: 'यह बुकिंग रद्द करें?',
     cancelMessage: 'हम मालिक को बताएँगे। छोटा-सा कारण देने से उन्हें योजना बनाने में मदद मिलेगी।',

@@ -76,12 +76,7 @@ export const owner: Translation<typeof en> = {
     availabilityHint: 'जैसे "स्लॉट: आज दोपहर 02:00" या "कल उपलब्ध"',
     photo: {
       title: 'फ़ोटो',
-      choose: 'फ़ोटो चुनें',
-      change: 'फ़ोटो बदलें',
-      hint: 'JPEG, PNG या WebP, 10 MB तक',
       preview: 'वाहन की फ़ोटो',
-      notImage: 'फ़ोटो चुनें (JPEG, PNG या WebP)',
-      tooLarge: 'यह फ़ोटो 10 MB से बड़ी है',
       failed: 'वाहन सहेजा गया, पर उसकी फ़ोटो अपलोड नहीं हो सकी। कृपया फिर से कोशिश करें।',
     },
     icon: 'कार्ड का चिह्न',

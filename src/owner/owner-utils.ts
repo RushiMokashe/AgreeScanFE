@@ -1,4 +1,4 @@
-import type { BookingStatus, LanguageCode, LocalizedText, OwnerBooking, OwnerBookingDetail } from '../lib/types'
+import type { BookingStatus, OwnerBooking, OwnerBookingDetail } from '../lib/types'
 
 /** The booking-request filters, in the order the chips show them; null shows every booking. */
 export const BOOKING_FILTERS: readonly (BookingStatus | null)[] = [
@@ -26,30 +26,3 @@ export function withBooking(bookings: readonly OwnerBooking[], updated: OwnerBoo
   return bookings.map((booking) => (booking.id === updated.id ? updated : booking))
 }
 
-/** An owner's own text in the active language, or in English when it has no translation. */
-export function inLanguage(text: LocalizedText, lang: LanguageCode): string {
-  return (lang === 'en' ? null : text[lang]) ?? text.en
-}
-
-/** A text being edited in three languages; blank translations are sent as null. */
-export interface LocalizedDraft {
-  en: string
-  mr: string
-  hi: string
-}
-
-export const EMPTY_DRAFT: LocalizedDraft = { en: '', mr: '', hi: '' }
-
-export function toDraft(text: LocalizedText | null): LocalizedDraft {
-  return { en: text?.en ?? '', mr: text?.mr ?? '', hi: text?.hi ?? '' }
-}
-
-/** The draft as the API takes it: trimmed, with blank translations as null. */
-export function fromDraft(draft: LocalizedDraft): LocalizedText {
-  return { en: draft.en.trim(), mr: draft.mr.trim() || null, hi: draft.hi.trim() || null }
-}
-
-/** An optional text: null when even its English is blank. */
-export function fromOptionalDraft(draft: LocalizedDraft): LocalizedText | null {
-  return draft.en.trim() ? fromDraft(draft) : null
-}

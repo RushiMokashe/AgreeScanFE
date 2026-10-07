@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { ConfirmSheet } from '../components/ConfirmSheet'
 import { ErrorState, LoadingState } from '../components/PageState'
 import { useApi } from '../hooks/useApi'
 import { useI18n } from '../i18n/i18n-context'
@@ -84,6 +85,21 @@ export default function AgroStorePage() {
           lastAdded={cart.lastAdded}
           bumped={cartBumped}
           onViewCart={() => setCartOpen(true)}
+        />
+      )}
+      {cart.replacement && (
+        <ConfirmSheet
+          title={t.store.cart.otherShop.title}
+          message={cart.replacement.question}
+          confirmLabel={t.store.cart.otherShop.confirm}
+          cancelLabel={t.store.cart.otherShop.cancel}
+          busy={cart.replacing}
+          onConfirm={() => {
+            void cart.replaceCart().then((added) => {
+              if (added) bumpCart()
+            })
+          }}
+          onClose={cart.keepCart}
         />
       )}
       {cartOpen && (

@@ -44,16 +44,19 @@ function PaymentOutcome({ payment, polling }: { payment: PaymentStatus; polling:
   const format = useFormat()
   const { icon, tone } = RESULT_STYLES[payment.status]
   const texts = t.payments.result
+  const amount = format.inr(payment.amount)
+  // A Scan & Pay payment waits for the seller, not a bank, and failing means the seller did not see the money.
+  const payee = payment.provider === 'SCAN_AND_PAY' ? payment.payeeName : null
+  const title = payee ? texts.scanAndPay.title[payment.status] : texts.title[payment.status]
+  const message = payee ? texts.scanAndPay.message[payment.status](amount, payee) : texts.message[payment.status](amount)
 
   return (
     <section role="status" className="flex flex-col items-center gap-space-xs text-center">
       <div className={`mb-space-xs flex h-20 w-20 items-center justify-center rounded-full shadow-sm ${tone}`}>
         <Icon name={icon} fill className="text-[44px]" />
       </div>
-      <h1 className="font-headline-sm text-headline-sm font-bold text-on-surface">{texts.title[payment.status]}</h1>
-      <p className="max-w-sm font-body-md text-body-md text-on-surface-variant">
-        {texts.message[payment.status](format.inr(payment.amount))}
-      </p>
+      <h1 className="font-headline-sm text-headline-sm font-bold text-on-surface">{title}</h1>
+      <p className="max-w-sm font-body-md text-body-md text-on-surface-variant">{message}</p>
       {payment.status === 'FAILED' && payment.failureReason && (
         <p className="font-body-sm text-body-sm text-error">{texts.reason(payment.failureReason)}</p>
       )}
@@ -71,10 +74,12 @@ function PaymentFacts({ payment }: { payment: PaymentStatus }) {
   const { t } = useI18n()
   const format = useFormat()
   const texts = t.payments.result
+  const provider = t.payments.providers[payment.provider]
   const facts: [string, string][] = [
     [texts.amount, format.inr(payment.amount)],
     [texts.paidFor, payment.description],
-    [texts.provider, t.payments.providers[payment.provider]],
+    [texts.provider, payment.payeeName ? `${provider} • ${payment.payeeName}` : provider],
+    ...(payment.upiReference ? [[texts.upiReference, payment.upiReference] satisfies [string, string]] : []),
     [texts.reference, `#${payment.paymentId}`],
     [texts.updated, format.dayAndTime(payment.updatedAt)],
   ]

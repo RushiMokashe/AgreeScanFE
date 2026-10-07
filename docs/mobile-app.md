@@ -105,6 +105,7 @@ cd frontend\android
 | **Voice search and read-aloud** | Android's web view has no built-in speech recognition, so the microphone shows "voice is not supported" for now. A native speech plugin can be added later. |
 | **Live notifications** | Arrive while the app is open. Notifications to a closed app need Firebase Cloud Messaging (a later step). |
 | **Payments** | The simulated, Stripe and Razorpay checkouts run inside the app. Before going live, test UPI app hand-off with Razorpay test keys on a real phone. |
+| **Scan & Pay** | The seller's QR is shown to scan with another phone. On the farmer's own phone, **Pay ₹X in a UPI app** opens PhonePe, Google Pay… with the seller and amount filled in: the app hands the `upi://pay` link to Android, like phone links. If no UPI app is installed, the button does nothing, and the QR and *Copy* UPI ID still work. |
 
 **Where the code is:**
 

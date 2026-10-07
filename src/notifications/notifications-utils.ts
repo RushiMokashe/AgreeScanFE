@@ -13,6 +13,8 @@ export const NOTIFICATION_STYLES: Record<NotificationType, { icon: string; tone:
   BOOKING_CANCELLED: { icon: 'cancel', tone: 'bg-surface-container-highest text-on-surface-variant' },
   PAYMENT_SUCCEEDED: { icon: 'payments', tone: 'bg-secondary-container text-on-secondary-container' },
   PAYMENT_FAILED: { icon: 'credit_card_off', tone: 'bg-error-container text-on-error-container' },
+  PAYMENT_TO_CONFIRM: { icon: 'qr_code_scanner', tone: 'bg-tertiary-fixed text-on-tertiary-fixed' },
+  PAYMENT_NOT_RECEIVED: { icon: 'report', tone: 'bg-error-container text-on-error-container' },
 }
 
 export function badgeLabel(count: number): string {

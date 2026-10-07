@@ -69,6 +69,7 @@ export const store = {
     add: (price: string) => `Add ${price}`,
     /** What a screen reader announces for the add button. */
     addLabel: (price: string, name: string) => `Add ${price} ${name} to cart`,
+    soldBy: (shop: string) => `Sold by ${shop}`,
     rating: (rating: string) => `${rating} out of 5 stars`,
   },
   cart: {
@@ -91,6 +92,12 @@ export const store = {
       CASH_ON_DELIVERY: () => 'Place Order • Cash on Delivery',
     } satisfies Record<PaymentMethod, (total: string) => string>,
     paymentNotStarted: 'Your order is placed, but the payment could not start. Pay for it from My Orders.',
+    from: (shop: string) => `From ${shop}`,
+    otherShop: {
+      title: 'Start a new cart?',
+      confirm: 'Empty cart and add',
+      cancel: 'Keep my cart',
+    },
     remove: (name: string) => `Remove ${name}`,
     added: (name: string) => `Added ${name}`,
     addedToCart: 'Added to cart',
