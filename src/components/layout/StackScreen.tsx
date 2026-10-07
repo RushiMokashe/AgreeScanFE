@@ -6,7 +6,7 @@ export function StackScreen({ title, children }: { title: string; children: Reac
   return (
     <>
       <StackHeader title={title} />
-      <main className="flex flex-col relative w-full pt-16 bg-surface pb-safe">{children}</main>
+      <main className="flex flex-col relative w-full pt-header bg-surface pb-safe">{children}</main>
     </>
   )
 }

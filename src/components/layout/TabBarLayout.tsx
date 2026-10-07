@@ -21,7 +21,7 @@ export function TabBarLayout({ tabs, badge, actions }: TabBarLayoutProps) {
       <AppHeader subtitle={title} badge={badge}>
         {actions}
       </AppHeader>
-      <main className="flex flex-col relative w-full pt-16 pb-24 bg-surface">
+      <main className="flex flex-col relative w-full pt-header pb-tabbar bg-surface">
         <Outlet />
       </main>
       <BottomNav tabs={tabs} />

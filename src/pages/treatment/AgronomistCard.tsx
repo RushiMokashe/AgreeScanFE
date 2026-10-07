@@ -1,6 +1,7 @@
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import type { Agronomist } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 
 interface AgronomistCardProps {
   agronomist: Agronomist
@@ -19,7 +20,7 @@ export function AgronomistCard({ agronomist }: AgronomistCardProps) {
           <img
             className="w-14 h-14 rounded-full object-cover shadow-sm bg-surface-container"
             alt={t.treatment.agronomist.photoAlt(name)}
-            src={photoUrl}
+            src={apiUrl(photoUrl)}
           />
           {onDuty && (
             <span className="absolute bottom-0 right-0 w-4 h-4 bg-tertiary-fixed rounded-full ring-2 ring-primary" />

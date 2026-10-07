@@ -1,6 +1,7 @@
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import type { Product } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { IMAGE_BADGE_TONES } from './store-utils'
 
 interface ProductImageProps {
@@ -19,7 +20,7 @@ export function ProductImage({ product }: ProductImageProps) {
   return (
     <div className="w-24 h-24 rounded-xl bg-surface-container-low relative flex-shrink-0 overflow-hidden">
       {imageUrl ? (
-        <img className="w-full h-full object-cover" src={imageUrl} alt={name} loading="lazy" />
+        <img className="w-full h-full object-cover" src={apiUrl(imageUrl)} alt={name} loading="lazy" />
       ) : (
         <div className="w-full h-full flex items-center justify-center text-primary">
           <Icon name="inventory_2" className="text-[36px]" />

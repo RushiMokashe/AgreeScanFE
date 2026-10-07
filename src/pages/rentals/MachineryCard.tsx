@@ -1,6 +1,7 @@
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import type { RentalListing } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { FavoriteButton } from './FavoriteButton'
 import { OperatorStrip } from './OperatorStrip'
 import { RentalActions } from './RentalActions'
@@ -37,7 +38,7 @@ export function MachineryCard({
     <article className="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
       <div className="relative w-full h-44 bg-surface-container-high">
         {imageUrl ? (
-          <img className="w-full h-full object-cover" src={imageUrl} alt={name} loading="lazy" />
+          <img className="w-full h-full object-cover" src={apiUrl(imageUrl)} alt={name} loading="lazy" />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-secondary-container/60 text-on-secondary-container">
             <Icon name={listing.icon ?? DEFAULT_MACHINE_ICON} className="text-[72px]" />

@@ -3,6 +3,7 @@ import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { OwnerListing } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { inLanguage } from '../owner-utils'
 
 /** Tile icon of a vehicle with neither a photo nor an icon of its own, per category. */
@@ -25,7 +26,7 @@ export function VehicleCard({ listing, switching, onToggleOnline }: VehicleCardP
     <li className="flex flex-col overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm">
       <div className="flex gap-space-sm p-space-sm">
         {listing.imageUrl ? (
-          <img src={listing.imageUrl} alt="" className="w-20 h-20 rounded-lg object-cover flex-shrink-0 bg-surface-container-high" />
+          <img src={apiUrl(listing.imageUrl)} alt="" className="w-20 h-20 rounded-lg object-cover flex-shrink-0 bg-surface-container-high" />
         ) : (
           <span className="w-20 h-20 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0">
             <Icon name={listing.icon ?? CATEGORY_ICONS[listing.category]} className="text-[36px]" />

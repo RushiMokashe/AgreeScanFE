@@ -5,6 +5,7 @@ import { useI18n } from '../../i18n/i18n-context'
 import type { Messages } from '../../i18n/translation'
 import { useFormat } from '../../i18n/useFormat'
 import type { RxBundle } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { diagnosisPath, savingPercent } from './store-utils'
 import { useTimedFlag } from './useTimedFlag'
 
@@ -87,7 +88,7 @@ export function RxBundleBanner({ bundle, inCart, onAdd }: RxBundleBannerProps) {
         </div>
         <div className="flex gap-3 my-2">
           <div className="w-20 h-20 rounded-xl bg-surface-container-lowest p-1 flex-shrink-0 overflow-hidden relative shadow-sm">
-            <img className="w-full h-full object-cover rounded-lg" src={bundle.imageUrl} alt={bundle.name} />
+            <img className="w-full h-full object-cover rounded-lg" src={apiUrl(bundle.imageUrl)} alt={bundle.name} />
             <div className="absolute top-1 left-1 bg-primary text-on-primary rounded text-[9px] font-bold px-1 py-0.5 leading-none">
               {t.store.rx.badge}
             </div>

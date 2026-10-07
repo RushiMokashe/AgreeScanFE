@@ -2,6 +2,7 @@ import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import { COUNTRY_CODE, formatPhone } from '../../lib/phone'
 import type { RentalBookingDetail } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 
 /** Tile icon of a booked vehicle that has neither a photo nor an icon. */
 const DEFAULT_VEHICLE_ICON = 'agriculture'
@@ -15,7 +16,7 @@ export function BookingVehicleCard({ booking }: { booking: RentalBookingDetail }
       <div className="flex items-center gap-space-sm">
         {booking.listingImageUrl ? (
           <img
-            src={booking.listingImageUrl}
+            src={apiUrl(booking.listingImageUrl)}
             alt=""
             className="w-16 h-16 rounded-lg object-cover flex-shrink-0 bg-surface-container-high"
           />

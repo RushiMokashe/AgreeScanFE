@@ -3,6 +3,7 @@ import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { FieldPlot } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { diagnosisPath } from './home-utils'
 import { PlotHealthPill } from './PlotHealthPill'
 import { PlotMetricTile } from './PlotMetricTile'
@@ -24,7 +25,7 @@ export function PlotCard({ plot }: PlotCardProps) {
             <img
               alt={t.home.plots.photoAlt(plot.crop, plot.fieldName)}
               className="w-14 h-14 rounded-lg object-cover flex-shrink-0 bg-surface-container"
-              src={plot.imageUrl}
+              src={apiUrl(plot.imageUrl)}
             />
           ) : (
             <div className="w-14 h-14 rounded-lg flex-shrink-0 bg-surface-container flex items-center justify-center text-primary">

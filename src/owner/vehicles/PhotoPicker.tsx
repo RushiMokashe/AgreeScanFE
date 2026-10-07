@@ -1,6 +1,7 @@
 import { useEffect, useId, useState, type ChangeEvent } from 'react'
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
+import { apiUrl } from '../../platform/api-base'
 import { MAX_PHOTO_BYTES } from './vehicle-form'
 
 const SVG_TYPE = 'image/svg+xml'
@@ -49,7 +50,7 @@ export function PhotoPicker({ currentUrl, onChange }: PhotoPickerProps) {
       <span className="font-title-md text-title-md font-bold text-on-surface">{t.owner.form.photo.title}</span>
       <div className="relative w-full h-44 overflow-hidden rounded-xl bg-surface-container-high">
         {shown ? (
-          <img src={shown} alt={t.owner.form.photo.preview} className="w-full h-full object-cover" />
+          <img src={apiUrl(shown)} alt={t.owner.form.photo.preview} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-on-surface-variant">
             <Icon name="add_a_photo" className="text-[48px]" />

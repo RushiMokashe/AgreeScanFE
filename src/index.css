@@ -221,6 +221,16 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* Content under the fixed 4rem header, which grows by the status bar in the installed app (edge-to-edge) and on notched phones. */
+@utility pt-header {
+  padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+}
+
+/* Content above the 4rem tab bar (which also grows by the gesture bar), plus room for the cart bar and a little air. */
+@utility pb-tabbar {
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+
 @utility no-scrollbar {
   scrollbar-width: none;
 

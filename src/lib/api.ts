@@ -1,5 +1,7 @@
 import { DEFAULT_LANGUAGE } from '../i18n/languages'
 import { common as englishCommon } from '../i18n/messages/en/common'
+import { apiUrl } from '../platform/api-base'
+import { sessionTransport } from '../platform/session-transport'
 import type {
   AdminCommodityPrice,
   AdminMarket,
@@ -109,14 +111,16 @@ export function setApiLanguage(language: LanguageCode, texts: ApiMessages): void
 // ---------------------------------------------------------------- Session (D2)
 
 /**
- * The signed-in session. Its access token lives only in this module's memory; the refresh token is an
- * HttpOnly cookie the browser sends to /api/auth only.
+ * The signed-in session. Its access token lives only in this module's memory. The refresh token is an HttpOnly
+ * cookie the browser sends to /api/auth only, or, in the installed app, kept in the app's private storage
+ * (platform/session-transport).
  */
 let session: AuthSession | null = null
 const sessionListeners = new Set<() => void>()
 
 function setSession(next: AuthSession | null): void {
   session = next
+  if (!next) void sessionTransport.forget()
   sessionListeners.forEach((listener) => listener())
 }
 
@@ -215,11 +219,15 @@ async function send(path: string, init: RequestInit, accessToken: string | undef
   headers.set('Accept-Language', requestLanguage)
   if (typeof init.body === 'string') headers.set('Content-Type', 'application/json')
   if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`)
+  for (const [name, value] of Object.entries(await sessionTransport.headersFor(path))) headers.set(name, value)
+  let res: Response
   try {
-    return await fetch(`/api${path}`, { ...init, headers })
+    res = await fetch(apiUrl(`/api${path}`), { ...init, headers })
   } catch {
     throw new ApiError(0, messages.noConnection)
   }
+  await sessionTransport.received(res)
+  return res
 }
 
 interface RequestOptions {

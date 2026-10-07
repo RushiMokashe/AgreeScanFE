@@ -1,5 +1,6 @@
 import { api, getSession, subscribeSession } from '../lib/api'
 import type { AppNotification, LanguageCode } from '../lib/types'
+import { apiUrl } from '../platform/api-base'
 
 /** The server pings every 25 s; a stream silent for longer than this has died without telling us. */
 const SILENCE_LIMIT_MS = 60_000
@@ -113,7 +114,7 @@ export function openNotificationStream(language: LanguageCode, listener: StreamL
     connection = current
     connectedToken = session.accessToken
     try {
-      const response = await fetch(STREAM_PATH, {
+      const response = await fetch(apiUrl(STREAM_PATH), {
         headers: {
           Accept: 'text/event-stream',
           'Accept-Language': language,

@@ -56,7 +56,7 @@ export function CartSheet({ cart, onRemove, onCheckout, onClose }: CartSheetProp
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="fixed inset-x-0 bottom-[calc(4rem_+_env(safe-area-inset-bottom,0px))] z-[46] mx-auto max-w-md max-h-[calc(100dvh_-_9rem)] flex flex-col rounded-t-2xl bg-surface-container-lowest shadow-xl outline-none transition-transform duration-200 ease-out starting:translate-y-full"
+        className="fixed inset-x-0 bottom-[calc(4rem_+_env(safe-area-inset-bottom,0px))] z-[46] mx-auto max-w-md max-h-[calc(100dvh_-_9rem_-_env(safe-area-inset-top,0px)_-_env(safe-area-inset-bottom,0px))] flex flex-col rounded-t-2xl bg-surface-container-lowest shadow-xl outline-none transition-transform duration-200 ease-out starting:translate-y-full"
       >
         <div className="flex items-center justify-between gap-space-sm px-margin pt-space-md pb-space-sm">
           <div>
