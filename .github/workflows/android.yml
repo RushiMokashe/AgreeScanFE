@@ -1,0 +1,105 @@
+# Checks the web app and builds the Android app (docs/mobile-app.md).
+#
+# Every pull request and push to main:  type-check, lint and build the web app, then build a debug APK, kept as the
+#                                      run's "agriscan-debug-apk" artifact: download it and send it to testers.
+# Push to main or a manual run, once the signing secrets are set: also a signed release AAB for the Play Store
+#                                      (and a signed APK), kept as "agriscan-release".
+#
+# Settings (repository → Settings → Secrets and variables → Actions):
+#   variable AGRISCAN_API_BASE_URL     the backend the app calls, e.g. https://api.your-domain.in (default: .env.android)
+#   secrets AGRISCAN_KEYSTORE_BASE64   the upload keystore, base64-encoded
+#           AGRISCAN_KEYSTORE_PASSWORD, AGRISCAN_KEY_ALIAS, AGRISCAN_KEY_PASSWORD
+name: Android app
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      api_base_url:
+        description: Backend address for this build (https://... for the Play Store); empty uses the repository variable
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Type-check, lint and build the web app
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx oxlint src
+      - run: npm run build
+
+  android:
+    name: Build the Android app
+    needs: web
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      REQUESTED_API_BASE_URL: ${{ inputs.api_base_url || vars.AGRISCAN_API_BASE_URL }}
+      HAS_SIGNING_KEY: ${{ secrets.AGRISCAN_KEYSTORE_BASE64 != '' }}
+      VERSION_CODE: ${{ github.run_number }}
+      VERSION_NAME: 1.0.${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - run: npm ci
+
+      - name: Choose the backend address
+        run: |
+          if [ -n "$REQUESTED_API_BASE_URL" ]; then
+            echo "VITE_API_BASE_URL=$REQUESTED_API_BASE_URL" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build the web app into the Android project
+        run: npm run android:sync
+
+      - name: Build the debug APK
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug -PversionCode="$VERSION_CODE" -PversionName="$VERSION_NAME"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agriscan-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: Build the signed release (AAB for the Play Store, APK for testers)
+        if: env.HAS_SIGNING_KEY == 'true' && github.event_name != 'pull_request'
+        working-directory: android
+        env:
+          AGRISCAN_KEYSTORE_BASE64: ${{ secrets.AGRISCAN_KEYSTORE_BASE64 }}
+          AGRISCAN_KEYSTORE_PASSWORD: ${{ secrets.AGRISCAN_KEYSTORE_PASSWORD }}
+          AGRISCAN_KEY_ALIAS: ${{ secrets.AGRISCAN_KEY_ALIAS }}
+          AGRISCAN_KEY_PASSWORD: ${{ secrets.AGRISCAN_KEY_PASSWORD }}
+        run: |
+          export AGRISCAN_KEYSTORE_FILE="$RUNNER_TEMP/upload-keystore.jks"
+          echo "$AGRISCAN_KEYSTORE_BASE64" | base64 --decode > "$AGRISCAN_KEYSTORE_FILE"
+          ./gradlew --no-daemon bundleRelease assembleRelease -PversionCode="$VERSION_CODE" -PversionName="$VERSION_NAME"
+          rm -f "$AGRISCAN_KEYSTORE_FILE"
+
+      - uses: actions/upload-artifact@v4
+        if: env.HAS_SIGNING_KEY == 'true' && github.event_name != 'pull_request'
+        with:
+          name: agriscan-release
+          path: |
+            android/app/build/outputs/bundle/release/app-release.aab
+            android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 90

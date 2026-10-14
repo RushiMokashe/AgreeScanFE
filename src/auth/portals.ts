@@ -6,11 +6,12 @@ export const LOGIN_PATH = '/login'
 export const PORTALS: Readonly<Record<Role, { home: string; icon: string }>> = {
   FARMER: { home: '/', icon: 'agriculture' },
   VEHICLE_OWNER: { home: '/owner', icon: 'local_shipping' },
+  SHOPKEEPER: { home: '/shop', icon: 'storefront' },
   ADMIN: { home: '/admin', icon: 'admin_panel_settings' },
 }
 
 /** Most to least privileged: a user with several roles signs in to the first one they hold. */
-export const ROLE_PRIORITY: readonly Role[] = ['ADMIN', 'VEHICLE_OWNER', 'FARMER']
+export const ROLE_PRIORITY: readonly Role[] = ['ADMIN', 'VEHICLE_OWNER', 'SHOPKEEPER', 'FARMER']
 
 /** The role a user signs in as, or undefined for an account without any role. */
 export function primaryRole(roles: readonly Role[]): Role | undefined {
@@ -27,10 +28,11 @@ function isWithin(pathname: string, base: string): boolean {
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 
-/** The role whose portal serves `pathname`: /admin/… and /owner/… have their own, the rest is the farmer app. */
+/** The role whose portal serves `pathname`: /admin/…, /owner/… and /shop/… have their own, the rest is the farmer app. */
 export function portalRole(pathname: string): Role {
   if (isWithin(pathname, PORTALS.ADMIN.home)) return 'ADMIN'
   if (isWithin(pathname, PORTALS.VEHICLE_OWNER.home)) return 'VEHICLE_OWNER'
+  if (isWithin(pathname, PORTALS.SHOPKEEPER.home)) return 'SHOPKEEPER'
   return 'FARMER'
 }
 

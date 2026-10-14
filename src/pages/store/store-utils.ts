@@ -1,4 +1,4 @@
-import type { Cart, ProductCategory, Tone } from '../../lib/types'
+import type { Cart, PaymentMethod, ProductCategory, Tone } from '../../lib/types'
 
 /** Chip beside the pack size: "Blight Tolerant" (success), "Systemic Fungicide" (neutral), a Hindi claim (warning). */
 export const TAG_TONES = {
@@ -69,6 +69,9 @@ export const DEPARTMENT_STYLES = {
 } as const satisfies Record<ProductCategory, DepartmentStyle>
 
 /** Whole-percent saving on the MRP: ₹420 against ₹530 -> 21. Zero when there is no saving. */
+/** How an order can be paid, in the order the cart offers them; the first is preselected. */
+export const PAYMENT_METHODS: readonly PaymentMethod[] = ['ONLINE', 'CASH_ON_DELIVERY']
+
 export function savingPercent(price: number, mrp: number): number {
   return mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0
 }

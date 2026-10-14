@@ -1,18 +1,17 @@
 import { useI18n } from '../../i18n/i18n-context'
 import type { RentalListing } from '../../lib/types'
-import { rentalPanelId, rentalTabId, type BookingStatus } from './rentals-utils'
+import { rentalPanelId, rentalTabId } from './rentals-utils'
 import { TransportCard } from './TransportCard'
 
 interface TransportSectionProps {
   listings: RentalListing[]
   /** Another tab is selected. */
   hidden: boolean
-  bookingStatus: (listingId: number) => BookingStatus
-  onBook: (listingId: number) => void
+  onBook: (listing: RentalListing) => void
 }
 
 /** Tab panel of tempos and trucks for taking the harvest to the mandi. */
-export function TransportSection({ listings, hidden, bookingStatus, onBook }: TransportSectionProps) {
+export function TransportSection({ listings, hidden, onBook }: TransportSectionProps) {
   const { t } = useI18n()
 
   return (
@@ -34,7 +33,6 @@ export function TransportSection({ listings, hidden, bookingStatus, onBook }: Tr
           key={listing.id}
           listing={listing}
           toneIndex={index}
-          bookingStatus={bookingStatus(listing.id)}
           onBook={onBook}
         />
       ))}

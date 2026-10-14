@@ -28,7 +28,7 @@ export function ProductsSection({
 
   return (
     // scroll-mt clears the fixed app header when scrolled into view
-    <section ref={ref} className="px-margin mt-6 scroll-mt-20">
+    <section ref={ref} className="px-margin mt-6 scroll-mt-[calc(5rem_+_env(safe-area-inset-top,0px))]">
       {filtered ? (
         <SearchResults category={category} searchTerm={searchTerm} onAdd={onAdd} onClearFilters={onClearFilters} />
       ) : (

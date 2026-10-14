@@ -1,0 +1,4 @@
+<!-- Adaptive launcher icon, foreground: the AgriScan leaf on transparent, filling the canvas (the generator insets it into Android's safe zone). -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <g transform="translate(-185.4 -248.8) scale(31.7)"><path d="M22 12C22 12 32 16 32 26C32 32 27 36 22 36C17 36 12 32 12 26C12 16 22 12 22 12Z" fill="#81C784"/><path d="M22 16V34" stroke="#1B5E20" stroke-width="2" stroke-linecap="round"/><path d="M22 22L28 18" stroke="#1B5E20" stroke-width="2" stroke-linecap="round"/><path d="M22 27L16 23" stroke="#1B5E20" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="18" r="2.5" fill="#FFD54F"/></g>
+</svg>

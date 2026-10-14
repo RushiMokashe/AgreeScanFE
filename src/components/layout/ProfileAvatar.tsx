@@ -1,5 +1,6 @@
 import { useAuth } from '../../auth/auth-context'
 import { useFarmer } from '../../context/farmer-context'
+import { apiUrl } from '../../platform/api-base'
 import { Icon } from '../Icon'
 
 const SIZES = {
@@ -29,7 +30,7 @@ export function ProfileAvatar({ size = 'md' }: { size?: keyof typeof SIZES }) {
   const box = `${SIZES[size]} flex-shrink-0 rounded-full`
 
   if (farmer?.avatarUrl) {
-    return <img alt="" src={farmer.avatarUrl} className={`${box} object-cover ring-2 ring-primary/20`} />
+    return <img alt="" src={apiUrl(farmer.avatarUrl)} className={`${box} object-cover ring-2 ring-primary/20`} />
   }
   const letters = initials(user?.name ?? '')
   return (

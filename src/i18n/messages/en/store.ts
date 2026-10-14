@@ -1,3 +1,5 @@
+import type { PaymentMethod } from '../../../lib/types'
+
 /** 1 -> "1 item", 4 -> "4 items" */
 const items = (count: number) => `${count} ${count === 1 ? 'item' : 'items'}`
 
@@ -67,6 +69,7 @@ export const store = {
     add: (price: string) => `Add ${price}`,
     /** What a screen reader announces for the add button. */
     addLabel: (price: string, name: string) => `Add ${price} ${name} to cart`,
+    soldBy: (shop: string) => `Sold by ${shop}`,
     rating: (rating: string) => `${rating} out of 5 stars`,
   },
   cart: {
@@ -79,7 +82,22 @@ export const store = {
     title: 'Your Cart',
     close: 'Close cart',
     total: 'Total',
-    placeOrder: 'Place Order • Cash on Delivery',
+    paymentMethod: 'How will you pay?',
+    methods: {
+      ONLINE: { title: 'Pay online', subtitle: 'UPI, card or net banking' },
+      CASH_ON_DELIVERY: { title: 'Cash on delivery', subtitle: 'Pay when the depot delivers' },
+    } satisfies Record<PaymentMethod, { title: string; subtitle: string }>,
+    placeOrder: {
+      ONLINE: (total: string) => `Pay ${total} & place order`,
+      CASH_ON_DELIVERY: () => 'Place Order • Cash on Delivery',
+    } satisfies Record<PaymentMethod, (total: string) => string>,
+    paymentNotStarted: 'Your order is placed, but the payment could not start. Pay for it from My Orders.',
+    from: (shop: string) => `From ${shop}`,
+    otherShop: {
+      title: 'Start a new cart?',
+      confirm: 'Empty cart and add',
+      cancel: 'Keep my cart',
+    },
     remove: (name: string) => `Remove ${name}`,
     added: (name: string) => `Added ${name}`,
     addedToCart: 'Added to cart',

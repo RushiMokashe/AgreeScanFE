@@ -3,27 +3,26 @@ import { RichText } from '../../components/RichText'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { RentalSpotlight } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { BookButton } from './BookButton'
 import { PerkTile } from './PerkTile'
-import type { BookingStatus } from './rentals-utils'
 
 interface SpotlightHeroProps {
   spotlight: RentalSpotlight
-  bookingStatus: BookingStatus
-  onBook: (listingId: number) => void
+  onBook: (spotlight: RentalSpotlight) => void
 }
 
 /** "Mandi Harvest Express": the featured harvest pickup, its fare and perks, and one-tap booking. */
-export function SpotlightHero({ spotlight, bookingStatus, onBook }: SpotlightHeroProps) {
+export function SpotlightHero({ spotlight, onBook }: SpotlightHeroProps) {
   const { t } = useI18n()
   const format = useFormat()
-  const { listingId, title, subtitle, label, imageUrl, baseFare, perKmRate, dispatchMinutes, perks } = spotlight
+  const { title, subtitle, label, imageUrl, baseFare, perKmRate, dispatchMinutes, perks } = spotlight
 
   return (
     <div className="px-margin my-space-sm">
       <div className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-md flex flex-col">
         <div className="relative w-full h-48 bg-surface-container-high">
-          <img className="w-full h-full object-cover" src={imageUrl} alt={title} />
+          <img className="w-full h-full object-cover" src={apiUrl(imageUrl)} alt={title} />
           <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/30 to-transparent" />
           <div className="absolute top-space-sm left-space-sm flex items-center gap-1.5 bg-primary-container/95 text-on-primary font-label-sm text-label-sm px-2.5 py-1 rounded-full shadow-md backdrop-blur-sm">
             <span className="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse" />
@@ -63,8 +62,7 @@ export function SpotlightHero({ spotlight, bookingStatus, onBook }: SpotlightHer
               label={t.rentals.spotlight.book}
               icon="arrow_forward"
               iconAfter
-              status={bookingStatus}
-              onBook={() => onBook(listingId)}
+              onBook={() => onBook(spotlight)}
               className="px-space-md gap-1"
             />
           </div>

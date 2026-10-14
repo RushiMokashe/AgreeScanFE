@@ -1,0 +1,8 @@
+<!-- Launch screen in the phone's dark theme. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2732" height="2732" viewBox="0 0 2732 2732">
+  <rect width="2732" height="2732" fill="#10140f"/>
+  <g transform="translate(1066 1066) scale(15)">
+    <rect x="2" y="4" width="40" height="40" rx="12" fill="#1B5E20" transform="translate(-2 -4)"/>
+    <g transform="translate(-2 -4)"><path d="M22 12C22 12 32 16 32 26C32 32 27 36 22 36C17 36 12 32 12 26C12 16 22 12 22 12Z" fill="#81C784"/><path d="M22 16V34" stroke="#1B5E20" stroke-width="2" stroke-linecap="round"/><path d="M22 22L28 18" stroke="#1B5E20" stroke-width="2" stroke-linecap="round"/><path d="M22 27L16 23" stroke="#1B5E20" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="18" r="2.5" fill="#FFD54F"/></g>
+  </g>
+</svg>

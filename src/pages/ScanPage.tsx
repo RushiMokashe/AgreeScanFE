@@ -13,7 +13,7 @@ export default function ScanPage() {
   return (
     <>
       <StackHeader title={t.nav.screens.scan} />
-      <main className="flex flex-col relative w-full pt-16 bg-surface pb-safe">
+      <main className="flex flex-col relative w-full pt-header bg-surface pb-safe">
         {error ? (
           <ErrorState error={error} onRetry={reload} />
         ) : data ? (

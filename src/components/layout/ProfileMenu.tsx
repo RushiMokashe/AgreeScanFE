@@ -24,6 +24,7 @@ const ACCOUNT_LINKS: Readonly<Record<Role, readonly AccountLink[]>> = {
     { to: '/orders', icon: 'receipt_long', label: (t) => t.nav.account.orders },
   ],
   VEHICLE_OWNER: [{ to: '/owner/profile', icon: 'person', label: (t) => t.nav.account.profile }],
+  SHOPKEEPER: [{ to: '/shop/profile', icon: 'person', label: (t) => t.nav.account.profile }],
   ADMIN: [{ to: '/admin/profile', icon: 'person', label: (t) => t.nav.account.profile }],
 }
 

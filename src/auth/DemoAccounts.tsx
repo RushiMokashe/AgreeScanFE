@@ -19,6 +19,8 @@ const DEMO_ACCOUNTS: readonly DemoAccount[] = [
   { role: 'VEHICLE_OWNER', name: 'Vinod Shinde', phone: '9822233445', password: 'Owner@123' },
   { role: 'VEHICLE_OWNER', name: 'Balwant Transport Fleet', phone: '9877766554', password: 'Owner@123' },
   { role: 'VEHICLE_OWNER', name: 'AgriScan Logistics', phone: '9000000009', password: 'Owner@123' },
+  { role: 'SHOPKEEPER', name: 'Sanjay Kulkarni', phone: '9800054321', password: 'Shop@123' },
+  { role: 'SHOPKEEPER', name: 'Mahesh Jadhav', phone: '9800054322', password: 'Shop@123' },
 ]
 
 /** One-tap chips that fill the sign-in form with a demo account, grouped by role. */

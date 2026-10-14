@@ -3,6 +3,7 @@ import { useToast } from '../../components/toast/toast-context'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { MandiMarket, PriceForecast } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { ForecastCard } from './ForecastCard'
 
 interface MarketHeroProps {
@@ -22,7 +23,7 @@ export function MarketHero({ market, forecast }: MarketHeroProps) {
         <img
           className="w-full h-full object-cover object-center"
           alt={t.mandi.market.photoAlt(market.name)}
-          src={market.imageUrl}
+          src={apiUrl(market.imageUrl)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent" />
         <div className="absolute top-space-sm left-margin right-margin flex items-center justify-between gap-space-xs">

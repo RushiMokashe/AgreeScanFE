@@ -3,6 +3,7 @@ import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { NearbyStock } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { DealerCard } from './DealerCard'
 import { nearestDealerId } from './treatment-utils'
 
@@ -50,7 +51,7 @@ export function NearbyStores({ stock }: NearbyStoresProps) {
       </div>
       <div
         className="w-full h-36 bg-surface-container bg-cover bg-center rounded-xl shadow-sm relative overflow-hidden flex items-end p-space-sm"
-        style={{ backgroundImage: `url("${mapImageUrl}")` }}
+        style={{ backgroundImage: `url("${apiUrl(mapImageUrl)}")` }}
       >
         <div className="bg-surface/90 backdrop-blur-md rounded-lg p-space-xs px-space-sm flex items-center gap-space-xs text-on-surface shadow-sm">
           <Icon name="near_me" className="text-primary text-[18px]" />

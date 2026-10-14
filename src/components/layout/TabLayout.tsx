@@ -1,3 +1,4 @@
+import { NotificationBell } from '../../notifications/NotificationBell'
 import { AssistantButton } from './AssistantButton'
 import type { NavTab } from './BottomNav'
 import { TabBarLayout } from './TabBarLayout'
@@ -11,7 +12,17 @@ const FARMER_TABS: readonly NavTab[] = [
   { to: '/store', icon: 'storefront', label: (t) => t.nav.tabs.store },
 ]
 
-/** Farmer tab screens: the header with the voice assistant's mic, the content and the five-tab bar. */
+/** Farmer tab screens: the header with the notification bell and the voice assistant's mic, the content and the tab bar. */
 export function TabLayout() {
-  return <TabBarLayout tabs={FARMER_TABS} actions={<AssistantButton />} />
+  return (
+    <TabBarLayout
+      tabs={FARMER_TABS}
+      actions={
+        <>
+          <NotificationBell to="/notifications" />
+          <AssistantButton />
+        </>
+      }
+    />
+  )
 }

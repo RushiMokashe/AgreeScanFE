@@ -3,6 +3,7 @@ import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import { useFormat } from '../../i18n/useFormat'
 import type { ScanSummary } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 
 interface DiseasedScanCardProps {
   scan: ScanSummary
@@ -23,7 +24,7 @@ export function DiseasedScanCard({ scan }: DiseasedScanCardProps) {
           <img
             alt={t.scan.photoAlt(scan.cropLabel, scan.diseaseName)}
             className="w-full h-full object-cover"
-            src={scan.imageUrl}
+            src={apiUrl(scan.imageUrl)}
           />
           <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-inverse-surface/80 text-inverse-on-surface font-label-sm text-[10px] font-bold">
             {t.home.scans.confidence(scan.confidence)}

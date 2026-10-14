@@ -4,7 +4,7 @@ import { FeatureChip } from './FeatureChip'
 import { OperatorStrip } from './OperatorStrip'
 import { RentalActions } from './RentalActions'
 import { RentalRate } from './RentalRate'
-import { TRANSPORT_TONES, alternate, type BookingStatus } from './rentals-utils'
+import { TRANSPORT_TONES, alternate } from './rentals-utils'
 
 /** Tile icon for a vehicle listed without one of its own. */
 const DEFAULT_VEHICLE_ICON = 'local_shipping'
@@ -13,12 +13,11 @@ interface TransportCardProps {
   listing: RentalListing
   /** Position of the card in its list; tile, feature icon and avatar colours alternate. */
   toneIndex: number
-  bookingStatus: BookingStatus
-  onBook: (listingId: number) => void
+  onBook: (listing: RentalListing) => void
 }
 
 /** A tempo or truck for mandi runs: capacity, per-km fare, perks, driver, and call / dispatch actions. */
-export function TransportCard({ listing, toneIndex, bookingStatus, onBook }: TransportCardProps) {
+export function TransportCard({ listing, toneIndex, onBook }: TransportCardProps) {
   const { name, description, icon, features } = listing
   const tone = alternate(TRANSPORT_TONES, toneIndex)
 
@@ -45,7 +44,7 @@ export function TransportCard({ listing, toneIndex, bookingStatus, onBook }: Tra
           </div>
         )}
         <OperatorStrip listing={listing} toneIndex={toneIndex} />
-        <RentalActions listing={listing} bookingStatus={bookingStatus} onBook={onBook} />
+        <RentalActions listing={listing} onBook={onBook} />
       </div>
     </article>
   )

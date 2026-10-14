@@ -6,9 +6,11 @@ import { ToastProvider } from './components/toast/ToastProvider'
 import { I18nProvider } from './i18n/I18nProvider'
 import './index.css'
 import { revealIconsWhenReady } from './lib/icon-font'
+import { startNativeApp } from './platform/native-app'
 import { router } from './router'
 
 revealIconsWhenReady()
+startNativeApp()
 
 // The session is restored while the saved language loads; the router's screens need both, and toasts
 // serve every layer.

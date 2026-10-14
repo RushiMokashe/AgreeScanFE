@@ -1,6 +1,7 @@
 import { Icon } from '../../components/Icon'
 import { useI18n } from '../../i18n/i18n-context'
 import type { ScanDetail } from '../../lib/types'
+import { apiUrl } from '../../platform/api-base'
 import { ConfidenceTile } from './ConfidenceTile'
 import { cropDisplayName, diagnosticAdvice } from './diagnosis-utils'
 import { DiagnosticAudioRow } from './DiagnosticAudioRow'
@@ -20,7 +21,7 @@ export function DiagnosisHeroCard({ scan }: DiagnosisHeroCardProps) {
         <img
           alt={t.scan.photoAlt(scan.cropLabel, scan.diseaseName)}
           className="w-full h-full object-cover"
-          src={scan.imageUrl}
+          src={apiUrl(scan.imageUrl)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-inverse-surface/20 to-transparent" />
         {/* One row, so the two chips shrink instead of overlapping on narrow phones */}

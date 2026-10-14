@@ -19,6 +19,7 @@ export interface ApiErrorBody {
   status: number
   error: string
   message: string
+  code: string | null // the message key for errors a screen reacts to, e.g. "store.cart.other-shop"
 }
 
 /** Paged admin lists: GET …?page=0&size=20 (page is zero-based). */
@@ -42,7 +43,7 @@ export interface LocalizedText {
   hi: string | null
 }
 
-export type Role = 'FARMER' | 'VEHICLE_OWNER' | 'ADMIN'
+export type Role = 'FARMER' | 'VEHICLE_OWNER' | 'SHOPKEEPER' | 'ADMIN'
 
 /** GET /api/auth/me, PATCH /api/auth/me */
 export interface CurrentUser {
@@ -54,6 +55,7 @@ export interface CurrentUser {
   preferredLanguage: LanguageCode
   farmerId: number | null // set when the user has the FARMER role
   ownerId: number | null // set when the user has the VEHICLE_OWNER role
+  shopId: number | null // set when the user has the SHOPKEEPER role
 }
 
 /** POST /api/auth/login */
@@ -542,7 +544,8 @@ export interface BookingReasonRequest {
   reason: string | null // ≤ 200 chars
 }
 
-export type BookingPaymentStatus = 'UNPAID' | 'PAID'
+/** VERIFYING: the farmer paid the owner by Scan & Pay and the owner has yet to confirm it. */
+export type BookingPaymentStatus = 'UNPAID' | 'VERIFYING' | 'PAID'
 
 /** POST /api/rentals/{id}/bookings (201). estimatedUnits: hours for HOUR, km for KM, days for DAY. */
 export interface BookRentalRequest {
@@ -610,6 +613,8 @@ export interface Product {
   flashDeal: boolean
   inStock: boolean
   barcode: string | null // EAN-13 printed on the pack; GET /api/store/products/barcode/{code} finds it
+  shopId: number // the shop selling it; a cart holds one shop's products
+  shopName: string // "Solapur Mandi Agro Depot"
 }
 
 export interface RxBundle {
@@ -664,12 +669,27 @@ export interface Cart {
   total: number
   freeDelivery: boolean
   summary: string // "Mancozeb 500g + Doodh Dhara 5kg"
+  shopId: number | null // the one shop whose products the cart holds; null when empty
+  shopName: string | null
+}
+
+/**
+ * POST /api/cart/items. A product of another shop is refused (409) unless replaceCart is true, which empties the cart
+ * first: ask the farmer before sending it.
+ */
+export interface AddToCartRequest {
+  productId: number
+  quantity: number
+  replaceCart?: boolean
 }
 
 export type PaymentMethod = 'ONLINE' | 'CASH_ON_DELIVERY'
 
-/** AWAITING_PAYMENT → PAID for online orders; PLACED for cash on delivery. */
-export type OrderStatus = 'AWAITING_PAYMENT' | 'PLACED' | 'PAID' | 'CANCELLED'
+/**
+ * AWAITING_PAYMENT → PAID for online orders, through VERIFYING_PAYMENT when the farmer paid the shop by Scan & Pay
+ * (back to AWAITING_PAYMENT if the shop did not receive it); PLACED for cash on delivery.
+ */
+export type OrderStatus = 'AWAITING_PAYMENT' | 'VERIFYING_PAYMENT' | 'PLACED' | 'PAID' | 'CANCELLED'
 
 /** POST /api/cart/checkout (201). The cart is emptied; an online order is then paid via POST /api/payments. */
 export interface CheckoutRequest {
@@ -702,6 +722,7 @@ export interface OrderSummary {
   paymentMethod: PaymentMethod
   summary: string // "Mancozeb 500g + Doodh Dhara 5kg"
   lines: OrderLine[]
+  shopName: string
 }
 
 // ---------------------------------------------------------------- Payments (Stripe | Razorpay | simulated)
@@ -710,7 +731,7 @@ export interface OrderSummary {
  * Chosen by the server (`agriscan.payments.provider`: auto | stripe | razorpay | simulated). `auto` picks
  * Stripe when its keys are set, else Razorpay, else the simulated test provider (no real money).
  */
-export type PaymentProviderKind = 'STRIPE' | 'RAZORPAY' | 'SIMULATED'
+export type PaymentProviderKind = 'STRIPE' | 'RAZORPAY' | 'SIMULATED' | 'SCAN_AND_PAY'
 
 export type PaymentPurpose = 'STORE_ORDER' | 'RENTAL_BOOKING'
 
@@ -743,6 +764,19 @@ export interface RazorpayCheckout {
   prefillContact: string
 }
 
+/**
+ * Paying the seller (shop or vehicle owner) directly: scan their QR, or open their UPI ID in a UPI app, then submit the
+ * UPI reference (POST /api/payments/scan-and-pay); the seller confirms the money arrived. Offered when the seller has
+ * set it up.
+ */
+export interface ScanAndPayOption {
+  payeeName: string
+  upiId: string | null
+  upiLink: string | null // "upi://pay?pa=...&am=730.00&..." with the amount filled in; with the UPI ID
+  qrImageUrl: string | null // the QR the seller uploaded (signed media URL), shown first
+  generatedQr: string | null // a QR of upiLink as a PNG data URL
+}
+
 export interface PaymentCheckout {
   paymentId: number
   purpose: PaymentPurpose
@@ -754,6 +788,14 @@ export interface PaymentCheckout {
   status: PaymentStatusCode
   stripe: StripeCheckout | null // set when provider is STRIPE
   razorpay: RazorpayCheckout | null // set when provider is RAZORPAY
+  scanAndPay: ScanAndPayOption | null
+}
+
+/** POST /api/payments/scan-and-pay (201, PaymentStatus with status PROCESSING) */
+export interface ScanAndPayRequest {
+  purpose: PaymentPurpose
+  referenceId: number
+  upiReference: string // the 12-digit UPI transaction ID (UTR) the UPI app showed
 }
 
 /**
@@ -770,15 +812,21 @@ export interface PaymentStatus {
   provider: PaymentProviderKind
   status: PaymentStatusCode
   failureReason: string | null
+  payeeName: string | null // Scan & Pay: who the farmer paid, and who confirms it
+  upiReference: string | null // Scan & Pay: the UPI reference the farmer entered
   updatedAt: string
 }
+
+/** How a test payment with the SIMULATED provider ends, and what the tester "paid" with. */
+export type SimulatedOutcome = 'SUCCEEDED' | 'FAILED'
+export type SimulatedMethod = 'CARD' | 'UPI'
 
 export interface ConfirmPaymentRequest {
   razorpayPaymentId?: string
   razorpayOrderId?: string
   razorpaySignature?: string
-  simulatedOutcome?: 'SUCCEEDED' | 'FAILED' // SIMULATED provider only
-  simulatedMethod?: 'CARD' | 'UPI'
+  simulatedOutcome?: SimulatedOutcome // SIMULATED provider only
+  simulatedMethod?: SimulatedMethod
 }
 
 // ---------------------------------------------------------------- Voice assistant
@@ -819,12 +867,16 @@ export interface VehicleOwnerProfile {
   phone: string
   hubId: number
   hubName: string
+  upiId: string | null // where Scan & Pay sends farmers' payments
+  upiQrUrl: string | null // the UPI QR the owner uploaded; POST/DELETE /api/owner/me/upi-qr
+  acceptsScanAndPay: boolean
 }
 
 export interface OwnerProfileInput {
   name: string
   businessName: string | null
   hubId: number
+  upiId: string | null // "" or null removes it
 }
 
 /** GET /api/owner/dashboard */
@@ -928,6 +980,8 @@ export type NotificationType =
   | 'BOOKING_CANCELLED'
   | 'PAYMENT_SUCCEEDED'
   | 'PAYMENT_FAILED'
+  | 'PAYMENT_TO_CONFIRM' // to the shopkeeper or owner: a farmer paid them by Scan & Pay
+  | 'PAYMENT_NOT_RECEIVED' // to the payer: the seller did not receive a Scan & Pay payment
 
 /**
  * GET /api/notifications?page=&size= (PageResponse<AppNotification>, newest first);
@@ -1074,6 +1128,7 @@ export interface AdminProduct {
   inStock: boolean
   imageUrl: string | null
   barcode: string | null
+  shopName: string
 }
 
 /** GET /api/admin/payments?status=&page=&size= (PageResponse<AdminPayment>, newest first) */
@@ -1088,4 +1143,98 @@ export interface AdminPayment {
   status: PaymentStatusCode
   createdAt: string
   updatedAt: string
+}
+
+// ---------------------------------------------------------------- Sellers: Scan & Pay confirmations (/api/seller/**)
+
+/**
+ * GET /api/seller/payments?status= (newest first; status=PROCESSING lists those to confirm), for shopkeepers and
+ * vehicle owners; POST /api/seller/payments/{id}/received and /not-received (body { reason? }) return it updated.
+ */
+export interface SellerPayment {
+  paymentId: number
+  purpose: PaymentPurpose
+  referenceId: number // the order or booking id
+  amount: number
+  description: string // "Agro Store order #12"
+  payerName: string
+  payerPhone: string
+  upiReference: string // look for it in the bank statement
+  status: PaymentStatusCode // PROCESSING until the seller decides, then SUCCEEDED or FAILED
+  failureReason: string | null
+  submittedAt: string
+  updatedAt: string
+}
+
+// ---------------------------------------------------------------- Shopkeeper portal (/api/shop/**)
+
+/** GET /api/shop/me; PUT /api/shop/me (body: ShopProfileInput); POST/DELETE /api/shop/me/upi-qr (multipart "image") */
+export interface ShopProfile {
+  id: number
+  name: string // "Solapur Mandi Agro Depot"
+  place: string // "Karmala, Solapur"
+  phone: string
+  upiId: string | null
+  upiQrUrl: string | null
+  acceptsScanAndPay: boolean
+}
+
+export interface ShopProfileInput {
+  name: string
+  place: string
+  upiId: string | null // "" or null removes it
+}
+
+/**
+ * GET /api/shop/products (newest first), GET /api/shop/products/{id}; POST and PUT take ShopProductInput;
+ * PATCH /api/shop/products/{id}/stock ({ inStock }); POST /api/shop/products/{id}/photo (multipart "image").
+ */
+export interface ShopProduct {
+  id: number
+  name: LocalizedText
+  category: ProductCategory
+  packSize: LocalizedText | null
+  description: LocalizedText
+  price: number
+  mrp: number | null
+  inStock: boolean
+  barcode: string | null
+  imageUrl: string | null
+}
+
+export interface ShopProductInput {
+  name: LocalizedText
+  category: ProductCategory
+  packSize: LocalizedText | null
+  description: LocalizedText
+  price: number // 1 to 10,00,000
+  mrp: number | null // at least the price
+  inStock: boolean
+  barcode: string | null // 13-digit EAN-13
+}
+
+/** GET /api/shop/orders?status= (newest first): an order placed with the shop, with the customer to deliver to. */
+export interface ShopOrder {
+  id: number
+  placedAt: string
+  customerName: string
+  customerPhone: string
+  itemCount: number
+  total: number
+  status: OrderStatus
+  paymentMethod: PaymentMethod
+  summary: string
+  lines: OrderLine[]
+}
+
+/** GET /api/shop/dashboard */
+export interface ShopDashboard {
+  shopName: string
+  ordersToday: number
+  salesToday: number
+  paymentsToVerify: number // orders paid by Scan & Pay waiting for the shopkeeper
+  products: number
+  outOfStock: number
+  acceptsScanAndPay: boolean
+  recentOrders: ShopOrder[]
 }
